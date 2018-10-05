@@ -1,6 +1,9 @@
 package ttp;
 
+import java.io.IOException;
 import java.io.PrintWriter;
+
+import ttp.service.Loader;
 
 public class App {
 
@@ -11,7 +14,13 @@ public class App {
     }
 
     public void run() {
-        pw.println("It works!");
+        String resource = "ttp/trivial_0.ttp";
+        Loader loader = new Loader();
+        try {
+            loader.load(resource);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
