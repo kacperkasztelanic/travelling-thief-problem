@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import ttp.loader.Loader;
+import ttp.loader.LoaderFactory;
 import ttp.model.Problem;
 
 public class App {
@@ -16,7 +17,7 @@ public class App {
 
     public void run() {
         String resource = "ttp/trivial_0.ttp";
-        Loader loader = new Loader();
+        Loader loader = LoaderFactory.getInstance();
         try {
             Problem problem = loader.load(resource);
             System.out.println(problem);
