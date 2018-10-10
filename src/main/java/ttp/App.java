@@ -3,7 +3,8 @@ package ttp;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import ttp.service.Loader;
+import ttp.loader.Loader;
+import ttp.model.Problem;
 
 public class App {
 
@@ -17,7 +18,8 @@ public class App {
         String resource = "ttp/trivial_0.ttp";
         Loader loader = new Loader();
         try {
-            loader.load(resource);
+            Problem problem = loader.load(resource);
+            System.out.println(problem);
         } catch (IOException e) {
             e.printStackTrace();
         }
