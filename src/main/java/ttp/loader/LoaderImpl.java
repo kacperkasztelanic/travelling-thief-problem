@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -103,7 +104,8 @@ public class LoaderImpl implements Loader {
 
     private List<String> readLines(String resource) throws IOException {
         try (BufferedReader br = new BufferedReader(
-                new InputStreamReader(getClass().getClassLoader().getResourceAsStream(resource)))) {
+                new InputStreamReader(Optional.ofNullable(getClass().getClassLoader().getResourceAsStream(resource))
+                        .orElseThrow(IOException::new)))) {
             return br.lines().collect(Collectors.toList());
         }
     }
