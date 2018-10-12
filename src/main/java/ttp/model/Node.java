@@ -16,4 +16,8 @@ public class Node {
     private final double x;
     @Getter
     private final double y;
+
+    public double distanceTo(Node other) {
+        return Math.hypot(x - other.getX(), y - other.getY());
+    }
 }

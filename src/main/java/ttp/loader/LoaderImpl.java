@@ -21,7 +21,7 @@ import ttp.model.Node;
 import ttp.model.Problem;
 import ttp.model.Problem.ProblemBuilder;
 
-@NoArgsConstructor(access=AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class LoaderImpl implements Loader {
 
     private static final String DEFAULT_NUMERIC = "-1";
@@ -94,10 +94,9 @@ public class LoaderImpl implements Loader {
                     continue;
                 }
             }
-            if (currentType == null) {
-                continue;
+            if (currentType != null) {
+                result.get(currentType).add(line);
             }
-            result.get(currentType).add(line);
         }
         return result;
     }
@@ -110,7 +109,7 @@ public class LoaderImpl implements Loader {
         }
     }
 
-    private static enum RawDataType {
+    private enum RawDataType {
 
         BASIC("PROBLEM NAME", true), NODE_COORDS("NODE_COORD_SECTION", false), ITEMS("ITEMS SECTION", false);
 
@@ -131,17 +130,11 @@ public class LoaderImpl implements Loader {
         }
     }
 
-    private static enum BasicDataType {
+    private enum BasicDataType {
 
-        PROBLEM_NAME("PROBLEM NAME"), 
-        KNAPSACK_DATA_TYPE("KNAPSACK DATA TYPE"), 
-        DIMENSION("DIMENSION"), 
-        NUMBER_OF_ITEMS("NUMBER OF ITEMS"), 
-        CAPACITY_OF_KNAPSACK("CAPACITY OF KNAPSACK"), 
-        MIN_SPEED("MIN SPEED"), 
-        MAX_SPEED("MAX SPEED"), 
-        RENTING_RATIO("RENTING RATIO"), 
-        EDGE_WEIGHT_TYPE("EDGE_WEIGHT_TYPE");
+        PROBLEM_NAME("PROBLEM NAME"), KNAPSACK_DATA_TYPE("KNAPSACK DATA TYPE"), DIMENSION("DIMENSION"), NUMBER_OF_ITEMS(
+                "NUMBER OF ITEMS"), CAPACITY_OF_KNAPSACK("CAPACITY OF KNAPSACK"), MIN_SPEED("MIN SPEED"), MAX_SPEED(
+                        "MAX SPEED"), RENTING_RATIO("RENTING RATIO"), EDGE_WEIGHT_TYPE("EDGE_WEIGHT_TYPE");
 
         @Getter
         private final String marker;
