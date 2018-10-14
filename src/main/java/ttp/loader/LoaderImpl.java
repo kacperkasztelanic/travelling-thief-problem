@@ -29,10 +29,14 @@ public class LoaderImpl implements Loader {
     private static final String ALL_WHITESPACES_REGEX = "\\s+";
 
     @Override
-    public Problem load(String resource) throws IOException {
-        List<String> lines = readLines(resource);
-        Map<RawDataType, List<String>> linesByRawDataType = groupLines(lines);
-        return parse(linesByRawDataType);
+    public Problem load(String resource) throws LoadException {
+        try {
+            List<String> lines = readLines(resource);
+            Map<RawDataType, List<String>> linesByRawDataType = groupLines(lines);
+            return parse(linesByRawDataType);
+        } catch (Exception e) {
+            throw new LoadException("Exception reading resource: " + resource, e);
+        }
     }
 
     private Problem parse(Map<RawDataType, List<String>> linesByRawDataType) {

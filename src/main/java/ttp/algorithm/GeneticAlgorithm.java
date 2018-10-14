@@ -1,4 +1,4 @@
-package ttp.algotithm;
+package ttp.algorithm;
 
 import ttp.model.Individual;
 import ttp.model.Problem;

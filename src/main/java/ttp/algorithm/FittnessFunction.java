@@ -1,6 +1,4 @@
-package ttp.algotithm;
-
-import java.util.Optional;
+package ttp.algorithm;
 
 import ttp.model.Individual;
 import ttp.model.Item;
@@ -20,12 +18,10 @@ public class FittnessFunction {
         for (int i = 0; i < individual.getNodes().length; i++) {
             Node node = problem.getNodes().get(i);
             Node nextNode = problem.getNodes().get(i);
-            Optional<Item> selectedItemOptional = problemInfo.itemsForNode(node.getId()).stream()
-                    .filter(e -> individual.getItems()[e.getId()]).findAny();
-            if (selectedItemOptional.isPresent()) {
-                Item selectedItem = selectedItemOptional.get();
-                profit += selectedItem.getProfit();
-                weight += selectedItem.getWeight();
+            Item item = individual.getItems()[i];
+            if (item != null) {
+                profit += item.getProfit();
+                weight += item.getWeight();
             }
             totalTime += problemInfo.distanceBetween(node, nextNode)
                     / (1 - weight * (problem.getMaxSpeed() - problem.getMinSpeed()) / problem.getCapacityOfKnapsack());

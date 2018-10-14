@@ -1,4 +1,4 @@
-package ttp.algotithm;
+package ttp.algorithm;
 
 import lombok.AllArgsConstructor;
 import ttp.model.Individual;

@@ -1,8 +1,8 @@
 package ttp;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 
+import ttp.loader.LoadException;
 import ttp.loader.Loader;
 import ttp.loader.LoaderFactory;
 import ttp.model.Problem;
@@ -23,8 +23,8 @@ public class App {
         Problem problem = null;
         try {
             problem = loader.load(resource);
-        } catch (IOException e) {
-            epw.println("Could not load resource: " + resource);
+        } catch (LoadException e) {
+            e.printStackTrace(epw);
             return;
         }
         pw.println(problem);
