@@ -19,5 +19,5 @@ public class GeneticParams {
     @Getter
     private final double mutationProbability;
     @Getter
-    private final double tourParticipation;
+    private final double tournamentSize;
 }

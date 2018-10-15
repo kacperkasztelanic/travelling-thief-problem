@@ -1,15 +1,15 @@
 package ttp.algorithm;
 
 import lombok.AllArgsConstructor;
-import ttp.model.Individual;
+import ttp.model.Item;
 import ttp.model.ProblemInfo;
 
 @AllArgsConstructor(staticName = "of")
-public class GreedyKnapsackSolver {
+public class GreedyKnapsackSolver implements KnapsackSolver {
 
     private final ProblemInfo problemInfo;
 
-    boolean[] solve(Individual individual) {
+    public Item[] solve(int[] nodes) {
         // TODO implement solve method
         return null;
     }

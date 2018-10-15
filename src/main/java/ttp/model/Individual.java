@@ -1,21 +1,47 @@
 package ttp.model;
 
-import java.util.Arrays;
 import java.util.Random;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import ttp.algorithm.FittnessFunction;
+import ttp.algorithm.KnapsackSolver;
 
-@AllArgsConstructor(staticName = "of")
 public class Individual {
 
     private static final int DIVISION_POINT_RATIO = 2;
     private static final Random random = new Random();
 
+    public static Individual of(int[] nodes, ProblemInfo problemInfo, KnapsackSolver knapsackSolver,
+            FittnessFunction fittnessFunction) {
+        return new Individual(nodes, knapsackSolver.solve(nodes), problemInfo, knapsackSolver, fittnessFunction);
+    }
+
+    private Individual(int[] nodes, Item[] items, ProblemInfo problemInfo, KnapsackSolver knapsackSolver,
+            FittnessFunction fittnessFunction) {
+        this.nodes = nodes;
+        this.items = items;
+        this.problemInfo = problemInfo;
+        this.knapsackSolver = knapsackSolver;
+        this.fittnessFunction = fittnessFunction;
+    }
+
     @Getter
     private final int[] nodes;
     @Getter
     private final Item[] items;
+
+    private final ProblemInfo problemInfo;
+    private final KnapsackSolver knapsackSolver;
+    private final FittnessFunction fittnessFunction;
+
+    private Result result;
+
+    public Result getResult() {
+        if (result == null) {
+            result = fittnessFunction.calculate(problemInfo, this);
+        }
+        return result;
+    }
 
     public Individual mutate(double probability) {
         int[] newNodes = new int[nodes.length];
@@ -28,7 +54,7 @@ public class Individual {
                 newNodes[j] = temp;
             }
         }
-        return Individual.of(newNodes, Arrays.copyOf(items, items.length));
+        return Individual.of(newNodes, problemInfo, knapsackSolver, fittnessFunction);
     }
 
     public Individual crossover(Individual other) {
@@ -36,7 +62,7 @@ public class Individual {
         int[] newNodes = new int[nodes.length];
         System.arraycopy(nodes, 0, newNodes, 0, divisionPoint);
         System.arraycopy(other.nodes, divisionPoint, newNodes, divisionPoint, nodes.length - divisionPoint);
-        return Individual.of(repair(newNodes), Arrays.copyOf(items, items.length));
+        return Individual.of(repair(newNodes), problemInfo, knapsackSolver, fittnessFunction);
     }
 
     private int[] repair(int[] newNodes) {

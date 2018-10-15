@@ -16,8 +16,8 @@ public class PropertyGeneticParamsProvider {
                 Double.parseDouble(props.getProperty(GeneticProperties.CROSSOVER_PROBABILITY.getKey())));
         params.mutationProbability(
                 Double.parseDouble(props.getProperty(GeneticProperties.MUTATION_PROBABILITY.getKey())));
-        params.tourParticipation(
-                Double.parseDouble(props.getProperty(GeneticProperties.TOURNAMENT_PARTICIPATION.getKey())));
+        params.tournamentSize(
+                Double.parseDouble(props.getProperty(GeneticProperties.TOURNAMENT_SIZE.getKey())));
         return params.build();
     }
 
@@ -26,9 +26,11 @@ public class PropertyGeneticParamsProvider {
 
     public enum GeneticProperties {
 
-        POPULATION_SIZE("population_size"), NUMBER_OF_GENERATIONS("number_of_generations"), CROSSOVER_PROBABILITY(
-                "crossover_probability"), MUTATION_PROBABILITY(
-                        "mutation_probability"), TOURNAMENT_PARTICIPATION("tournament_participation");
+        POPULATION_SIZE("population_size"), 
+        NUMBER_OF_GENERATIONS("number_of_generations"), 
+        CROSSOVER_PROBABILITY("crossover_probability"), 
+        MUTATION_PROBABILITY("mutation_probability"), 
+        TOURNAMENT_SIZE("tournament_size");
 
         @Getter
         private final String key;
