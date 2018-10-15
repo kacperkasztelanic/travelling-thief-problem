@@ -21,10 +21,10 @@ public class MatrixUtils {
         }
         int length = MatrixUtils.numLength(f);
         StringBuilder sb = new StringBuilder();
+        String format = "%" + (length + decimalPlaces + 1) + "." + decimalPlaces + "f";
         for (int row = 0; row < matrix.length; row++) {
             for (int col = 0; col < matrix[row].length; col++) {
-                sb.append(String.format(Locale.US, "%" + (length + decimalPlaces + 1) + "." + decimalPlaces + "f",
-                        matrix[row][col]));
+                sb.append(String.format(Locale.US, format, matrix[row][col]));
                 sb.append(DELIMETER);
             }
             sb.append(System.lineSeparator());

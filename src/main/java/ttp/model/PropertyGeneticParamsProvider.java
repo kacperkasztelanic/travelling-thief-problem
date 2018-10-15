@@ -1,0 +1,40 @@
+package ttp.model;
+
+import java.util.Properties;
+
+import lombok.Getter;
+import ttp.model.GeneticParams.GeneticParamsBuilder;
+
+public class PropertyGeneticParamsProvider {
+
+    public static GeneticParams forProperties(Properties props) {
+        GeneticParamsBuilder params = GeneticParams.builder();
+        params.populationSize(Integer.parseInt(props.getProperty(GeneticProperties.POPULATION_SIZE.getKey())));
+        params.numberOfGenerations(
+                Integer.parseInt(props.getProperty(GeneticProperties.NUMBER_OF_GENERATIONS.getKey())));
+        params.crossoverProbability(
+                Double.parseDouble(props.getProperty(GeneticProperties.CROSSOVER_PROBABILITY.getKey())));
+        params.mutationProbability(
+                Double.parseDouble(props.getProperty(GeneticProperties.MUTATION_PROBABILITY.getKey())));
+        params.tourParticipation(
+                Double.parseDouble(props.getProperty(GeneticProperties.TOURNAMENT_PARTICIPATION.getKey())));
+        return params.build();
+    }
+
+    private PropertyGeneticParamsProvider() {
+    }
+
+    public enum GeneticProperties {
+
+        POPULATION_SIZE("population_size"), NUMBER_OF_GENERATIONS("number_of_generations"), CROSSOVER_PROBABILITY(
+                "crossover_probability"), MUTATION_PROBABILITY(
+                        "mutation_probability"), TOURNAMENT_PARTICIPATION("tournament_participation");
+
+        @Getter
+        private final String key;
+
+        private GeneticProperties(String key) {
+            this.key = key;
+        }
+    }
+}

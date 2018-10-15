@@ -44,7 +44,6 @@ public class Individual {
         for (int i = 0; i < newNodes.length; i++) {
             counts[newNodes[i] - 1]++;
         }
-        System.out.println("Counts: " + Arrays.toString(counts));
         int[] duplicated = new int[counts.length / 2];
         int[] absent = new int[counts.length / 2];
         for (int i = 0, d = 0, a = 0; i < counts.length; i++) {
@@ -54,8 +53,6 @@ public class Individual {
                 absent[a++] = i + 1;
             }
         }
-        System.out.println("Duplicates: " + Arrays.toString(duplicated));
-        System.out.println("Absent: " + Arrays.toString(absent));
         for (int i = 0, d = 0; i < newNodes.length && d < duplicated.length && duplicated[d] != 0; i++) {
             if (newNodes[i] == duplicated[d]) {
                 newNodes[i] = absent[d];
@@ -63,13 +60,5 @@ public class Individual {
             }
         }
         return newNodes;
-    }
-
-    public static void main(String[] args) {
-        Individual i = Individual.of(null, null);
-        int[] a = { 4, 2, 2, 1 };
-        System.out.println(Arrays.toString(a));
-        i.repair(a);
-        System.out.println(Arrays.toString(a));
     }
 }
