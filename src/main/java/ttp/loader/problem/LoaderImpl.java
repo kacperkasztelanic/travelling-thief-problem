@@ -1,4 +1,4 @@
-package ttp.loader;
+package ttp.loader.problem;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ttp.loader.exception.LoadException;
 import ttp.model.Item;
 import ttp.model.Node;
 import ttp.model.Problem;

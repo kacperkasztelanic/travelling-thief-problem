@@ -1,4 +1,4 @@
-package ttp.loader;
+package ttp.loader.problem;
 
 public class LoaderFactory {
 
