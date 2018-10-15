@@ -3,11 +3,9 @@ package ttp.model;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 
 @AllArgsConstructor(staticName = "of")
 @EqualsAndHashCode
-@ToString(includeFieldNames = false)
 public class Item {
 
     @Getter
@@ -18,4 +16,10 @@ public class Item {
     private final int weight;
     @Getter
     private final int assignedNode;
+
+    @Override
+    public String toString() {
+        return "Item(id: " + id + ", profit: " + profit + ", weight: " + weight + ", assignedNode: " + assignedNode
+                + ")";
+    }
 }

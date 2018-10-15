@@ -1,13 +1,13 @@
 package ttp.model;
 
+import java.util.Locale;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 
 @AllArgsConstructor(staticName = "of")
 @EqualsAndHashCode
-@ToString
 public class Result {
 
     @Getter
@@ -18,4 +18,10 @@ public class Result {
     private final double totalTime;
     @Getter
     private final double value;
+
+    @Override
+    public String toString() {
+        return String.format(Locale.US, "Result(profit: %d, weight: %d, totalTime: %.2f, value: %.2f)", profit, weight,
+                totalTime, value);
+    }
 }

@@ -1,11 +1,16 @@
 package ttp.model;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import ttp.algorithm.FittnessFunction;
 import ttp.algorithm.KnapsackSolver;
 
+@EqualsAndHashCode
 public class Individual {
 
     private static final int DIVISION_POINT_RATIO = 2;
@@ -70,21 +75,26 @@ public class Individual {
         for (int i = 0; i < newNodes.length; i++) {
             counts[newNodes[i] - 1]++;
         }
-        int[] duplicated = new int[counts.length / 2];
+        Set<Integer> duplicated = new HashSet<>(counts.length / 2);
         int[] absent = new int[counts.length / 2];
-        for (int i = 0, d = 0, a = 0; i < counts.length; i++) {
+        for (int i = 0, a = 0; i < counts.length; i++) {
             if (counts[i] == 2) {
-                duplicated[d++] = i + 1;
+                duplicated.add(i + 1);
             } else if (counts[i] == 0) {
                 absent[a++] = i + 1;
             }
         }
-        for (int i = 0, d = 0; i < newNodes.length && d < duplicated.length && duplicated[d] != 0; i++) {
-            if (newNodes[i] == duplicated[d]) {
-                newNodes[i] = absent[d];
-                d++;
+        for (int i = 0, a = 0; i < newNodes.length && a < absent.length && absent[a] != 0; i++) {
+            if (duplicated.contains(newNodes[i])) {
+                duplicated.remove(newNodes[i]);
+                newNodes[i] = absent[a++];
             }
         }
         return newNodes;
+    }
+
+    @Override
+    public String toString() {
+        return "Individual(nodes: " + Arrays.toString(nodes) + ", items: " + Arrays.toString(items) + ")";
     }
 }

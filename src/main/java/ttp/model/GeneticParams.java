@@ -3,11 +3,9 @@ package ttp.model;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 
 @Builder
 @EqualsAndHashCode
-@ToString
 public class GeneticParams {
 
     @Getter
@@ -20,4 +18,12 @@ public class GeneticParams {
     private final double mutationProbability;
     @Getter
     private final double tournamentSize;
+
+    @Override
+    public String toString() {
+        return "GeneticParams(populationSize: " + populationSize + ", numberOfGenerations: " + numberOfGenerations
+                + ", crossoverProbability: " + crossoverProbability + ", mutationProbability: " + mutationProbability
+                + ", tournamentSize: " + tournamentSize + ")";
+    }
+
 }

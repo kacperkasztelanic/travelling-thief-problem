@@ -1,9 +1,14 @@
 package ttp.algorithm;
 
+import java.util.List;
+
 import ttp.model.Individual;
-import ttp.model.Problem;
+import ttp.model.Population;
+import ttp.model.ProblemInfo;
 
 public interface Algorithm {
 
-    Individual solve(Problem problem, FittnessFunction function);
+    List<Population> solve(ProblemInfo problem);
+
+    Individual solveForBest(ProblemInfo problem);
 }

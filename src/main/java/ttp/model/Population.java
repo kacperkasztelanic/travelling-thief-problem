@@ -3,10 +3,12 @@ package ttp.model;
 import java.util.Random;
 
 import lombok.Getter;
+import lombok.ToString;
 import ttp.algorithm.FittnessFunction;
 import ttp.algorithm.KnapsackSolver;
 import ttp.utils.ArrayUtils;
 
+@ToString(includeFieldNames = false, of = { "members" })
 public class Population {
 
     private static final Random random = new Random();
@@ -45,7 +47,7 @@ public class Population {
     }
 
     public Population nextGeneration() {
-        int numberOfChildren = (int) geneticParams.getCrossoverProbability() * geneticParams.getPopulationSize();
+        int numberOfChildren = (int) (geneticParams.getCrossoverProbability() * geneticParams.getPopulationSize());
         Individual[] children = crossover(numberOfChildren);
         Individual[] clonedParents = cloneParentsIntoChildren(geneticParams.getPopulationSize() - numberOfChildren);
         Individual[] newMembers = new Individual[geneticParams.getPopulationSize()];
@@ -72,8 +74,9 @@ public class Population {
     }
 
     private Individual[] select(int n) {
-        return random.ints((long) geneticParams.getTournamentSize() * n, 0, members.length).mapToObj(i -> members[i])
-                .sorted((a, b) -> Double.compare(a.getResult().getValue(), b.getResult().getValue())).limit(n)
+        return random.ints((long) (geneticParams.getTournamentSize() * members.length * n), 0, members.length)
+                .mapToObj(i -> members[i])
+                .sorted((a, b) -> Double.compare(b.getResult().getValue(), a.getResult().getValue())).limit(n)
                 .toArray(Individual[]::new);
     }
 

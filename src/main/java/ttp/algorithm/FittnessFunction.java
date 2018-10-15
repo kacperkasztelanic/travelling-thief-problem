@@ -1,5 +1,6 @@
 package ttp.algorithm;
 
+import lombok.AllArgsConstructor;
 import ttp.model.Individual;
 import ttp.model.Item;
 import ttp.model.Node;
@@ -7,6 +8,7 @@ import ttp.model.Problem;
 import ttp.model.ProblemInfo;
 import ttp.model.Result;
 
+@AllArgsConstructor(staticName = "instance")
 public class FittnessFunction {
 
     public Result calculate(ProblemInfo problemInfo, Individual individual) {
@@ -17,7 +19,8 @@ public class FittnessFunction {
 
         for (int i = 0; i < individual.getNodes().length; i++) {
             Node node = problem.getNodes().get(i);
-            Node nextNode = problem.getNodes().get(i);
+            int nextNodeIndex = (i + 1) % individual.getNodes().length;
+            Node nextNode = problem.getNodes().get(nextNodeIndex);
             Item item = individual.getItems()[i];
             if (item != null) {
                 profit += item.getProfit();

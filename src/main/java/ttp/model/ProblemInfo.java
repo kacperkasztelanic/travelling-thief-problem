@@ -34,7 +34,7 @@ public class ProblemInfo {
     }
 
     public double distanceBetween(Node a, Node b) {
-        return distances[a.getId()][b.getId()];
+        return distances[a.getId() - 1][b.getId() - 1];
     }
 
     private static double[][] calculateDistances(List<Node> nodes) {
