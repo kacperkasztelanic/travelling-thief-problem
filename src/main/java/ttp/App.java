@@ -1,10 +1,12 @@
 package ttp;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.cli.CommandLine;
@@ -36,9 +38,10 @@ public class App {
     private static final String OPTION_HELP_SHORT = "h";
     private static final String OPTION_PROBLEM_SHORT = "p";
     private static final String OPTION_PROPERTIES_SHORT = "g";
-    private static final String OPTION_CASES_SHORT = "l";
 
+    private static final String DEFAULT_PROPERTIES = "default.properties";
     private static final String BASE_CASES_DIRECTORY = "cases";
+    private static final String INDEX_FILE = "index";
 
     private final PrintWriter pw;
     private final PrintWriter epw;
@@ -57,10 +60,13 @@ public class App {
     }
 
     private String prepareCasesInfo() {
-        try {
-            File[] files = new File(getClass().getClassLoader().getResource(BASE_CASES_DIRECTORY).toURI()).listFiles();
-            return Arrays.stream(files).map(File::getName).collect(Collectors.joining(System.lineSeparator()));
-        } catch (URISyntaxException e) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(System.lineSeparator()).append("Available cases:").append(System.lineSeparator());
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(Optional
+                .ofNullable(getClass().getClassLoader().getResourceAsStream(BASE_CASES_DIRECTORY + "/" + INDEX_FILE))
+                .orElseThrow(IOException::new)))) {
+            return builder.append(br.lines().collect(Collectors.joining(System.lineSeparator()))).toString();
+        } catch (IOException e) {
             epw.println("Resource management exception");
             return "";
         }
@@ -73,13 +79,13 @@ public class App {
                 .argName("PROBLEM").valueSeparator().required().build());
         opts.addOption(Option.builder(OPTION_PROPERTIES_SHORT).longOpt("geneticProps").desc("genetic properties file")
                 .hasArg().argName("FILE").valueSeparator().required().build());
-        opts.addOption(Option.builder(OPTION_CASES_SHORT).longOpt("listCases").desc("list available cases").build());
         return opts;
     }
 
     private void printHelp() {
         helpFormatter.printHelp(pw, HelpFormatter.DEFAULT_WIDTH, "ttp", null, options, HelpFormatter.DEFAULT_LEFT_PAD,
                 HelpFormatter.DEFAULT_DESC_PAD, null);
+        pw.println(cases);
     }
 
     private CommandLine parseInput(String[] args) {
@@ -97,14 +103,13 @@ public class App {
             printHelp();
             return;
         }
-        if (line.hasOption(OPTION_CASES_SHORT)) {
-            pw.println(cases);
-            return;
-        }
-        String resource = Paths.get(BASE_CASES_DIRECTORY).resolve(line.getOptionValue(OPTION_PROBLEM_SHORT)).normalize()
-                .toString();
+        runInternal(line);
+    }
+
+    public void runInternal(CommandLine line) {
+        String resource = BASE_CASES_DIRECTORY + "/" + line.getOptionValue(OPTION_PROBLEM_SHORT);
         String propertyFile = Paths.get(line.getOptionValue(OPTION_PROPERTIES_SHORT)).normalize().toString();
-        PropertyLoader propertyLoader = PropertyLoaderFactory.getInstance("default.properties");
+        PropertyLoader propertyLoader = PropertyLoaderFactory.getInstance(DEFAULT_PROPERTIES);
         GeneticParams geneticParams = null;
         Loader loader = LoaderFactory.getInstance();
         Problem problem = null;
@@ -128,7 +133,7 @@ public class App {
 
     public static void main(String[] args) {
         PrintWriter pw = new PrintWriter(System.out);
-        PrintWriter epw = new PrintWriter(System.err);
+        PrintWriter epw = new PrintWriter(System.out);
         App app = new App(pw, epw);
         CommandLine line = app.parseInput(args);
         app.run(line);
