@@ -4,7 +4,7 @@ import java.util.List;
 
 import ttp.model.Individual;
 import ttp.model.Population;
-import ttp.model.ProblemInfo;
+import ttp.model.wrapper.ProblemInfo;
 
 public interface Algorithm {
 

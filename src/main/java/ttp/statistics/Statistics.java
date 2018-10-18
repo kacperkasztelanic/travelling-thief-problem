@@ -1,4 +1,4 @@
-package ttp.presenter;
+package ttp.statistics;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

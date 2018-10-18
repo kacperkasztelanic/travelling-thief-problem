@@ -1,11 +1,13 @@
 package ttp.model;
 
+import java.util.Comparator;
 import java.util.Random;
 
 import lombok.Getter;
 import lombok.ToString;
 import ttp.algorithm.FittnessFunction;
 import ttp.algorithm.KnapsackSolver;
+import ttp.model.wrapper.ProblemInfo;
 import ttp.utils.ArrayUtils;
 
 @ToString(includeFieldNames = false, of = { "members" })
@@ -70,13 +72,18 @@ public class Population {
     }
 
     public Individual[] cloneParentsIntoChildren(int numberOfParentsToClone) {
-        return select(numberOfParentsToClone);
+        Individual[] clones = new Individual[numberOfParentsToClone];
+        Individual[] selected = select(numberOfParentsToClone);
+        for (int i = 0; i < numberOfParentsToClone; i++) {
+            clones[i] = Individual.of(selected[i]);
+        }
+        return clones;
     }
 
     private Individual[] select(int n) {
         return random.ints((long) (geneticParams.getTournamentSize() * members.length * n), 0, members.length)
                 .mapToObj(i -> members[i])
-                .sorted((a, b) -> Double.compare(b.getResult().getValue(), a.getResult().getValue())).limit(n)
+                .sorted(Comparator.comparingDouble((Individual i) -> i.getResult().getValue()).reversed()).limit(n)
                 .toArray(Individual[]::new);
     }
 

@@ -1,4 +1,4 @@
-package ttp.presenter;
+package ttp.statistics;
 
 import java.util.Arrays;
 import java.util.DoubleSummaryStatistics;

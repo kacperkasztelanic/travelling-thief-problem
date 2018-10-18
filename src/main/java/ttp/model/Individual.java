@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import ttp.algorithm.FittnessFunction;
 import ttp.algorithm.KnapsackSolver;
+import ttp.model.wrapper.ProblemInfo;
 
 @EqualsAndHashCode
 public class Individual {
@@ -19,6 +20,12 @@ public class Individual {
     public static Individual of(int[] nodes, ProblemInfo problemInfo, KnapsackSolver knapsackSolver,
             FittnessFunction fittnessFunction) {
         return new Individual(nodes, knapsackSolver.solve(nodes), problemInfo, knapsackSolver, fittnessFunction);
+    }
+
+    public static Individual of(Individual individual) {
+        int[] newNodes = Arrays.copyOf(individual.getNodes(), individual.getNodes().length);
+        return new Individual(newNodes, individual.knapsackSolver.solve(newNodes), individual.problemInfo,
+                individual.knapsackSolver, individual.fittnessFunction);
     }
 
     private Individual(int[] nodes, Item[] items, ProblemInfo problemInfo, KnapsackSolver knapsackSolver,

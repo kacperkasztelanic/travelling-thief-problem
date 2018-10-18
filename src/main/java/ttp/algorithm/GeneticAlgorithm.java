@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import ttp.model.GeneticParams;
 import ttp.model.Individual;
 import ttp.model.Population;
-import ttp.model.ProblemInfo;
+import ttp.model.wrapper.ProblemInfo;
 
 @AllArgsConstructor(staticName = "instance")
 public class GeneticAlgorithm implements Algorithm {

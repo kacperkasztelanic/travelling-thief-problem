@@ -5,8 +5,8 @@ import ttp.model.Individual;
 import ttp.model.Item;
 import ttp.model.Node;
 import ttp.model.Problem;
-import ttp.model.ProblemInfo;
 import ttp.model.Result;
+import ttp.model.wrapper.ProblemInfo;
 
 @AllArgsConstructor(staticName = "instance")
 public class FittnessFunction {
@@ -18,9 +18,9 @@ public class FittnessFunction {
         double totalTime = 0;
 
         for (int i = 0; i < individual.getNodes().length; i++) {
-            Node node = problem.getNodes().get(i);
+            Node node = problem.getNodes().get(individual.getNodes()[i] - 1);
             int nextNodeIndex = (i + 1) % individual.getNodes().length;
-            Node nextNode = problem.getNodes().get(nextNodeIndex);
+            Node nextNode = problem.getNodes().get(individual.getNodes()[nextNodeIndex] - 1);
             for (Item availableItem : problemInfo.itemsForNode(node.getId())) {
                 Item item = individual.getItems()[availableItem.getId() - 1];
                 if (item != null) {

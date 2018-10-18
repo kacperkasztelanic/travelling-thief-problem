@@ -29,12 +29,15 @@ import ttp.loader.problem.LoaderFactory;
 import ttp.loader.properties.PropertyLoader;
 import ttp.loader.properties.PropertyLoaderFactory;
 import ttp.model.GeneticParams;
-import ttp.model.Individual;
 import ttp.model.Population;
 import ttp.model.Problem;
-import ttp.model.ProblemInfo;
 import ttp.model.PropertyGeneticParamsProvider;
+import ttp.model.wrapper.ProblemInfo;
+import ttp.presenter.ChartResultPresenter;
+import ttp.presenter.ConsoleResultPresenter;
 import ttp.presenter.ResultPresenter;
+import ttp.statistics.Statistics;
+import ttp.statistics.StatisticsEngine;
 
 public class App {
 
@@ -45,6 +48,10 @@ public class App {
     private static final String DEFAULT_PROPERTIES = "default.properties";
     private static final String BASE_CASES_DIRECTORY = "cases";
     private static final String INDEX_FILE = "index";
+    
+    private static final String CHART_FILE_NAME = "chart.png";
+    private static final int CHART_WIDTH = 1280;
+    private static final int CHART_HEIGHT = 960;
 
     private final PrintWriter pw;
     private final PrintWriter epw;
@@ -130,8 +137,11 @@ public class App {
         KnapsackSolver knapsackSolver = GreedyKnapsackSolver.instance(problemInfo);
         Algorithm algorithm = GeneticAlgorithm.instance(fittnessFunction, geneticParams, knapsackSolver);
         List<Population> solution = algorithm.solve(problemInfo);
-        ResultPresenter presenter = ResultPresenter.instance();
-        presenter.present(solution);
+        List<Statistics> statistics = StatisticsEngine.analyze(solution);
+        ResultPresenter chartPresenter = ChartResultPresenter.instance(CHART_FILE_NAME, CHART_WIDTH, CHART_HEIGHT);
+        ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
+        chartPresenter.present(statistics);
+        consolePresenter.present(statistics);
     }
 
     public static void main(String[] args) {

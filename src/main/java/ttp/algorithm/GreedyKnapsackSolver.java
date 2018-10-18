@@ -11,7 +11,7 @@ import lombok.ToString;
 import ttp.model.Item;
 import ttp.model.Node;
 import ttp.model.Problem;
-import ttp.model.ProblemInfo;
+import ttp.model.wrapper.ProblemInfo;
 
 @AllArgsConstructor(staticName = "instance")
 public class GreedyKnapsackSolver implements KnapsackSolver {

@@ -1,4 +1,4 @@
-package ttp.model;
+package ttp.model.wrapper;
 
 import java.util.Collections;
 import java.util.List;
@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import ttp.model.Item;
+import ttp.model.Node;
+import ttp.model.Problem;
 
 @EqualsAndHashCode(of = { "problem" })
 @ToString(of = { "problem" }, includeFieldNames = false)
