@@ -58,7 +58,7 @@ public class GreedyKnapsackSolver implements KnapsackSolver {
                     - rentingRatio * ((distanceToFinish / (maxSpeed + dVx)) - (distanceToFinish / maxSpeed));
             result[i] = ItemWithValue.of(item, itemValue);
         }
-        Arrays.sort(result, Comparator.comparingDouble(ItemWithValue::getValue));
+        Arrays.sort(result, Comparator.comparingDouble(ItemWithValue::getValue).reversed());
         return result;
     }
 

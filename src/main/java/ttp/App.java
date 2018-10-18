@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -29,9 +30,11 @@ import ttp.loader.properties.PropertyLoader;
 import ttp.loader.properties.PropertyLoaderFactory;
 import ttp.model.GeneticParams;
 import ttp.model.Individual;
+import ttp.model.Population;
 import ttp.model.Problem;
 import ttp.model.ProblemInfo;
 import ttp.model.PropertyGeneticParamsProvider;
+import ttp.presenter.ResultPresenter;
 
 public class App {
 
@@ -126,9 +129,9 @@ public class App {
         FittnessFunction fittnessFunction = FittnessFunction.instance();
         KnapsackSolver knapsackSolver = GreedyKnapsackSolver.instance(problemInfo);
         Algorithm algorithm = GeneticAlgorithm.instance(fittnessFunction, geneticParams, knapsackSolver);
-        Individual solution = algorithm.solveForBest(problemInfo);
-        pw.println(solution);
-        pw.println(solution.getResult());
+        List<Population> solution = algorithm.solve(problemInfo);
+        ResultPresenter presenter = ResultPresenter.instance();
+        presenter.present(solution);
     }
 
     public static void main(String[] args) {
