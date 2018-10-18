@@ -21,10 +21,12 @@ public class FittnessFunction {
             Node node = problem.getNodes().get(i);
             int nextNodeIndex = (i + 1) % individual.getNodes().length;
             Node nextNode = problem.getNodes().get(nextNodeIndex);
-            Item item = individual.getItems()[i];
-            if (item != null) {
-                profit += item.getProfit();
-                weight += item.getWeight();
+            for (Item availableItem : problemInfo.itemsForNode(node.getId())) {
+                Item item = individual.getItems()[availableItem.getId() - 1];
+                if (item != null) {
+                    profit += item.getProfit();
+                    weight += item.getWeight();
+                }
             }
             totalTime += problemInfo.distanceBetween(node, nextNode)
                     / (1 - weight * (problem.getMaxSpeed() - problem.getMinSpeed()) / problem.getCapacityOfKnapsack());
