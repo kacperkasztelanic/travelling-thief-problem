@@ -19,7 +19,7 @@ import lombok.AllArgsConstructor;
 import ttp.statistics.Statistics;
 
 @AllArgsConstructor(staticName = "instance")
-public class ChartResultPresenter implements ResultPresenter {
+public class JFreeChartResultPresenter implements ResultPresenter {
 
     private final String file;
     private final int width;
