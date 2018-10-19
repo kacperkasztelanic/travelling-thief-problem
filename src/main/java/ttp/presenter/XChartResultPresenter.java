@@ -17,18 +17,21 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import ttp.statistics.Statistics;
+import ttp.model.Statistics;
 
-@AllArgsConstructor(staticName = "instance")
-public class XChartResultPresenter implements ResultPresenter {
+public class XChartResultPresenter extends AbstractChartResultPresenter {
 
-    private final String file;
-    private final int width;
-    private final int height;
+    public static XChartResultPresenter instance(String file, int width, int height) {
+        return new XChartResultPresenter(file, width, height);
+    }
+
+    private XChartResultPresenter(String file, int width, int height) {
+        super(file, width, height);
+    }
 
     @Override
     public void present(List<Statistics> results) {
-        XYChart chart = prepareChart(results, "Travelling Thief Problem", width, height);
+        XYChart chart = prepareChart(results, TITLE, width, height);
         try {
             saveChartAsPng(chart, file);
         } catch (IOException e) {
@@ -37,8 +40,8 @@ public class XChartResultPresenter implements ResultPresenter {
     }
 
     private XYChart prepareChart(List<Statistics> statistics, String title, int width, int height) {
-        XYChart chart = new XYChartBuilder().width(width).height(height).title(title).xAxisTitle("Generation")
-                .yAxisTitle("Value").build();
+        XYChart chart = new XYChartBuilder().width(width).height(height).title(title).xAxisTitle(X_LABEL)
+                .yAxisTitle(Y_LABEL).build();
         chart.getStyler().setXAxisMin(0.0);
         chart.getStyler().setXAxisMax((double) statistics.size());
         chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideSE);
@@ -55,9 +58,12 @@ public class XChartResultPresenter implements ResultPresenter {
 
     private List<ChartSeries> prepareSeriesCollection(List<Statistics> statistics) {
         List<Number> xSeries = IntStream.range(0, statistics.size()).boxed().collect(Collectors.toList());
-        ChartSeries minSeries = ChartSeries.of("minValue", xSeries, prepareSeries(statistics, Statistics::getMinValue));
-        ChartSeries maxSeries = ChartSeries.of("maxValue", xSeries, prepareSeries(statistics, Statistics::getMaxValue));
-        ChartSeries avgSeries = ChartSeries.of("avgValue", xSeries, prepareSeries(statistics, Statistics::getAvgValue));
+        ChartSeries minSeries = ChartSeries.of(MIN_SERIES_LABEL, xSeries,
+                prepareSeries(statistics, Statistics::getMinValue));
+        ChartSeries maxSeries = ChartSeries.of(MAX_SERIES_LABEL, xSeries,
+                prepareSeries(statistics, Statistics::getMaxValue));
+        ChartSeries avgSeries = ChartSeries.of(AVG_SERIES_LABEL, xSeries,
+                prepareSeries(statistics, Statistics::getAvgValue));
         return Arrays.asList(minSeries, maxSeries, avgSeries);
     }
 

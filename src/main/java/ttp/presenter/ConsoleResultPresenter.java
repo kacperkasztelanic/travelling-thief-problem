@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
-import ttp.statistics.Statistics;
+import ttp.model.Statistics;
 
 @AllArgsConstructor(staticName = "instance")
 public class ConsoleResultPresenter implements ResultPresenter {

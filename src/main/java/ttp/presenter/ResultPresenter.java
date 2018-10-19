@@ -2,7 +2,7 @@ package ttp.presenter;
 
 import java.util.List;
 
-import ttp.statistics.Statistics;
+import ttp.model.Statistics;
 
 public interface ResultPresenter {
 

@@ -32,12 +32,12 @@ import ttp.model.GeneticParams;
 import ttp.model.Population;
 import ttp.model.Problem;
 import ttp.model.PropertyGeneticParamsProvider;
+import ttp.model.Statistics;
 import ttp.model.wrapper.ProblemInfo;
 import ttp.presenter.ConsoleResultPresenter;
 import ttp.presenter.ResultPresenter;
 import ttp.presenter.XChartResultPresenter;
-import ttp.statistics.Statistics;
-import ttp.statistics.StatisticsEngine;
+import ttp.utils.StatisticsUtils;
 
 public class App {
 
@@ -137,7 +137,7 @@ public class App {
         KnapsackSolver knapsackSolver = GreedyKnapsackSolver.instance(problemInfo);
         Algorithm algorithm = GeneticAlgorithm.instance(fittnessFunction, geneticParams, knapsackSolver);
         List<Population> solution = algorithm.solve(problemInfo);
-        List<Statistics> statistics = StatisticsEngine.analyze(solution);
+        List<Statistics> statistics = StatisticsUtils.analyze(solution);
         ResultPresenter chartPresenter = XChartResultPresenter.instance(CHART_FILE_NAME, CHART_WIDTH, CHART_HEIGHT);
         ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
         chartPresenter.present(statistics);

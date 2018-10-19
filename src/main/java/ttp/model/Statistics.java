@@ -1,4 +1,4 @@
-package ttp.statistics;
+package ttp.model;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

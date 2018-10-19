@@ -15,15 +15,17 @@ import org.jfree.data.xy.XYDataItem;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import lombok.AllArgsConstructor;
-import ttp.statistics.Statistics;
+import ttp.model.Statistics;
 
-@AllArgsConstructor(staticName = "instance")
-public class JFreeChartResultPresenter implements ResultPresenter {
+public class JFreeChartResultPresenter extends AbstractChartResultPresenter {
 
-    private final String file;
-    private final int width;
-    private final int height;
+    public static JFreeChartResultPresenter instance(String file, int width, int height) {
+        return new JFreeChartResultPresenter(file, width, height);
+    }
+
+    private JFreeChartResultPresenter(String file, int width, int height) {
+        super(file, width, height);
+    }
 
     @Override
     public void present(List<Statistics> results) {
@@ -35,11 +37,22 @@ public class JFreeChartResultPresenter implements ResultPresenter {
         }
     }
 
+    private JFreeChart prepareChart(List<Statistics> statistics) {
+        XYSeriesCollection collection = prepareSeriesCollection(statistics);
+        return ChartFactory.createXYLineChart(TITLE, X_LABEL, Y_LABEL, collection, PlotOrientation.VERTICAL, true,
+                false, false);
+    }
+
+    private void saveChartAsPng(JFreeChart chart, String file, int width, int height) throws IOException {
+        File chartFile = new File(file);
+        ChartUtils.saveChartAsPNG(chartFile, chart, width, height);
+    }
+
     private XYSeriesCollection prepareSeriesCollection(List<Statistics> statistics) {
         XYSeriesCollection collection = new XYSeriesCollection();
-        collection.addSeries(prepareSeries(statistics, Statistics::getMinValue, "minValue"));
-        collection.addSeries(prepareSeries(statistics, Statistics::getMaxValue, "maxValue"));
-        collection.addSeries(prepareSeries(statistics, Statistics::getAvgValue, "avgValue"));
+        collection.addSeries(prepareSeries(statistics, Statistics::getMinValue, MIN_SERIES_LABEL));
+        collection.addSeries(prepareSeries(statistics, Statistics::getMaxValue, MAX_SERIES_LABEL));
+        collection.addSeries(prepareSeries(statistics, Statistics::getAvgValue, AVG_SERIES_LABEL));
         return collection;
     }
 
@@ -51,16 +64,5 @@ public class JFreeChartResultPresenter implements ResultPresenter {
             xySeries.add(item);
         }
         return xySeries;
-    }
-
-    private JFreeChart prepareChart(List<Statistics> statistics) {
-        XYSeriesCollection collection = prepareSeriesCollection(statistics);
-        return ChartFactory.createXYLineChart("Travelling Thief Problem", "Generation", "Value", collection,
-                PlotOrientation.VERTICAL, true, false, false);
-    }
-
-    private void saveChartAsPng(JFreeChart chart, String file, int width, int height) throws IOException {
-        File chartFile = new File(file);
-        ChartUtils.saveChartAsPNG(chartFile, chart, width, height);
     }
 }

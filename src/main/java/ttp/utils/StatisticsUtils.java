@@ -1,4 +1,4 @@
-package ttp.statistics;
+package ttp.utils;
 
 import java.util.Arrays;
 import java.util.DoubleSummaryStatistics;
@@ -9,12 +9,13 @@ import lombok.experimental.UtilityClass;
 import ttp.model.Individual;
 import ttp.model.Population;
 import ttp.model.Result;
+import ttp.model.Statistics;
 
 @UtilityClass
-public class StatisticsEngine {
+public class StatisticsUtils {
 
     public static List<Statistics> analyze(List<Population> results) {
-        return results.stream().map(StatisticsEngine::analyze).collect(Collectors.toList());
+        return results.stream().map(StatisticsUtils::analyze).collect(Collectors.toList());
     }
 
     public static Statistics analyze(Population results) {
