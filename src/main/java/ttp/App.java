@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -18,12 +19,12 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import ttp.algorithm.AdvancedGreedyKnapsackSolver;
 import ttp.algorithm.Algorithm;
 import ttp.algorithm.FitnessFunction;
-import ttp.algorithm.TtpFitnessFunction;
 import ttp.algorithm.GeneticAlgorithm;
-import ttp.algorithm.AdvancedGreedyKnapsackSolver;
 import ttp.algorithm.KnapsackSolver;
+import ttp.algorithm.TtpFitnessFunction;
 import ttp.loader.exception.LoadException;
 import ttp.loader.problem.Loader;
 import ttp.loader.problem.LoaderFactory;
@@ -49,7 +50,7 @@ public class App {
     private static final String DEFAULT_PROPERTIES = "default.properties";
     private static final String BASE_CASES_DIRECTORY = "cases";
     private static final String INDEX_FILE = "index";
-    
+
     private static final String CHART_FILE_NAME = "chart.png";
     private static final int CHART_WIDTH = 1280;
     private static final int CHART_HEIGHT = 960;
@@ -137,8 +138,9 @@ public class App {
         FitnessFunction fittnessFunction = TtpFitnessFunction.instance();
         KnapsackSolver knapsackSolver = AdvancedGreedyKnapsackSolver.instance(problemInfo);
         Algorithm algorithm = GeneticAlgorithm.instance(fittnessFunction, geneticParams, knapsackSolver);
-        List<Population> solution = algorithm.solve(problemInfo);
-        List<Statistics> statistics = StatisticsUtils.analyze(solution);
+        List<List<Population>> solution = Stream.generate(() -> algorithm.solve(problemInfo)).limit(10)
+                .collect(Collectors.toList());
+        List<Statistics> statistics = StatisticsUtils.analyzeMultiple(solution);
         ResultPresenter chartPresenter = XChartResultPresenter.instance(CHART_FILE_NAME, CHART_WIDTH, CHART_HEIGHT);
         ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
         chartPresenter.present(statistics);
