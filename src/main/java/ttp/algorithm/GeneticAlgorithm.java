@@ -13,7 +13,7 @@ import ttp.model.wrapper.ProblemInfo;
 @AllArgsConstructor(staticName = "instance")
 public class GeneticAlgorithm implements Algorithm {
 
-    private final FittnessFunction fittnessFunction;
+    private final FitnessFunction fittnessFunction;
     private final GeneticParams geneticParams;
     private final KnapsackSolver knapsackSolver;
 

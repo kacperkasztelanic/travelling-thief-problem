@@ -9,7 +9,7 @@ import ttp.model.Result;
 import ttp.model.wrapper.ProblemInfo;
 
 @AllArgsConstructor(staticName = "instance")
-public class FittnessFunction {
+public class FitnessFunction {
 
     public Result calculate(ProblemInfo problemInfo, Individual individual) {
         Problem problem = problemInfo.getProblem();

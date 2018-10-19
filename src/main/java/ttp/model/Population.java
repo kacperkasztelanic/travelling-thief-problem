@@ -5,7 +5,7 @@ import java.util.Random;
 
 import lombok.Getter;
 import lombok.ToString;
-import ttp.algorithm.FittnessFunction;
+import ttp.algorithm.FitnessFunction;
 import ttp.algorithm.KnapsackSolver;
 import ttp.model.wrapper.ProblemInfo;
 import ttp.utils.ArrayUtils;
@@ -21,15 +21,15 @@ public class Population {
     private final GeneticParams geneticParams;
     private final ProblemInfo problemInfo;
     private final KnapsackSolver knapsackSolver;
-    private final FittnessFunction fittnessFunction;
+    private final FitnessFunction fittnessFunction;
 
     public static Population of(Individual[] members, GeneticParams geneticParams, ProblemInfo problemInfo,
-            KnapsackSolver knapsackSolver, FittnessFunction fittnessFunction) {
+            KnapsackSolver knapsackSolver, FitnessFunction fittnessFunction) {
         return new Population(members, geneticParams, problemInfo, knapsackSolver, fittnessFunction);
     }
 
     private Population(Individual[] members, GeneticParams geneticParams, ProblemInfo problemInfo,
-            KnapsackSolver knapsackSolver, FittnessFunction fittnessFunction) {
+            KnapsackSolver knapsackSolver, FitnessFunction fittnessFunction) {
         this.members = members;
         this.geneticParams = geneticParams;
         this.problemInfo = problemInfo;
@@ -38,7 +38,7 @@ public class Population {
     }
 
     public static Population randomPopulation(GeneticParams geneticParams, ProblemInfo problemInfo,
-            KnapsackSolver knapsackSolver, FittnessFunction fittnessFunction) {
+            KnapsackSolver knapsackSolver, FitnessFunction fittnessFunction) {
         int size = geneticParams.getPopulationSize();
         int[] nodes = problemInfo.getProblem().getNodes().stream().mapToInt(Node::getId).toArray();
         Individual[] members = new Individual[size];

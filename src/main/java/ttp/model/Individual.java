@@ -7,7 +7,7 @@ import java.util.Set;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import ttp.algorithm.FittnessFunction;
+import ttp.algorithm.FitnessFunction;
 import ttp.algorithm.KnapsackSolver;
 import ttp.model.wrapper.ProblemInfo;
 
@@ -18,7 +18,7 @@ public class Individual {
     private static final Random random = new Random();
 
     public static Individual of(int[] nodes, ProblemInfo problemInfo, KnapsackSolver knapsackSolver,
-            FittnessFunction fittnessFunction) {
+            FitnessFunction fittnessFunction) {
         return new Individual(nodes, knapsackSolver.solve(nodes), problemInfo, knapsackSolver, fittnessFunction);
     }
 
@@ -29,7 +29,7 @@ public class Individual {
     }
 
     private Individual(int[] nodes, Item[] items, ProblemInfo problemInfo, KnapsackSolver knapsackSolver,
-            FittnessFunction fittnessFunction) {
+            FitnessFunction fittnessFunction) {
         this.nodes = nodes;
         this.items = items;
         this.problemInfo = problemInfo;
@@ -44,7 +44,7 @@ public class Individual {
 
     private final ProblemInfo problemInfo;
     private final KnapsackSolver knapsackSolver;
-    private final FittnessFunction fittnessFunction;
+    private final FitnessFunction fittnessFunction;
 
     private Result result;
 
