@@ -20,8 +20,9 @@ import org.apache.commons.cli.ParseException;
 
 import ttp.algorithm.Algorithm;
 import ttp.algorithm.FitnessFunction;
+import ttp.algorithm.TtpFitnessFunction;
 import ttp.algorithm.GeneticAlgorithm;
-import ttp.algorithm.GreedyKnapsackSolver;
+import ttp.algorithm.AdvancedGreedyKnapsackSolver;
 import ttp.algorithm.KnapsackSolver;
 import ttp.loader.exception.LoadException;
 import ttp.loader.problem.Loader;
@@ -133,8 +134,8 @@ public class App {
         pw.println(geneticParams);
         pw.println(problem);
         ProblemInfo problemInfo = ProblemInfo.of(problem);
-        FitnessFunction fittnessFunction = FitnessFunction.instance();
-        KnapsackSolver knapsackSolver = GreedyKnapsackSolver.instance(problemInfo);
+        FitnessFunction fittnessFunction = TtpFitnessFunction.instance();
+        KnapsackSolver knapsackSolver = AdvancedGreedyKnapsackSolver.instance(problemInfo);
         Algorithm algorithm = GeneticAlgorithm.instance(fittnessFunction, geneticParams, knapsackSolver);
         List<Population> solution = algorithm.solve(problemInfo);
         List<Statistics> statistics = StatisticsUtils.analyze(solution);

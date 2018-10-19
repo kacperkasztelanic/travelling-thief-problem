@@ -14,7 +14,7 @@ import ttp.model.Problem;
 import ttp.model.wrapper.ProblemInfo;
 
 @AllArgsConstructor(staticName = "instance")
-public class GreedyKnapsackSolver implements KnapsackSolver {
+public class AdvancedGreedyKnapsackSolver implements KnapsackSolver {
 
     private final ProblemInfo problemInfo;
 
