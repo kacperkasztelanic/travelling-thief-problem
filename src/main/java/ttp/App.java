@@ -55,6 +55,8 @@ public class App {
     private static final int CHART_WIDTH = 1280;
     private static final int CHART_HEIGHT = 960;
 
+    private static final int NUMBER_OF_RUNS = 10;
+
     private final PrintWriter pw;
     private final PrintWriter epw;
 
@@ -138,7 +140,7 @@ public class App {
         FitnessFunction fittnessFunction = TtpFitnessFunction.instance();
         KnapsackSolver knapsackSolver = AdvancedGreedyKnapsackSolver.instance(problemInfo);
         Algorithm algorithm = GeneticAlgorithm.instance(fittnessFunction, geneticParams, knapsackSolver);
-        List<List<Population>> solution = Stream.generate(() -> algorithm.solve(problemInfo)).limit(10)
+        List<List<Population>> solution = Stream.generate(() -> algorithm.solve(problemInfo)).limit(NUMBER_OF_RUNS)
                 .collect(Collectors.toList());
         List<Statistics> statistics = StatisticsUtils.analyzeMultiple(solution);
         ResultPresenter chartPresenter = XChartResultPresenter.instance(CHART_FILE_NAME, CHART_WIDTH, CHART_HEIGHT);
@@ -147,6 +149,7 @@ public class App {
         consolePresenter.present(statistics);
     }
 
+    @SuppressWarnings("all")
     public static void main(String[] args) {
         PrintWriter pw = new PrintWriter(System.out);
         PrintWriter epw = new PrintWriter(System.out);

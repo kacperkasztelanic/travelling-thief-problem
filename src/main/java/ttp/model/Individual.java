@@ -24,8 +24,9 @@ public class Individual {
 
     public static Individual of(Individual individual) {
         int[] newNodes = Arrays.copyOf(individual.getNodes(), individual.getNodes().length);
-        return new Individual(newNodes, individual.knapsackSolver.solve(newNodes), individual.problemInfo,
-                individual.knapsackSolver, individual.fittnessFunction);
+        Item[] newItems = Arrays.copyOf(individual.getItems(), individual.getItems().length);
+        return new Individual(newNodes, newItems, individual.problemInfo, individual.knapsackSolver,
+                individual.fittnessFunction);
     }
 
     private Individual(int[] nodes, Item[] items, ProblemInfo problemInfo, KnapsackSolver knapsackSolver,
@@ -77,6 +78,7 @@ public class Individual {
         return Individual.of(repair(newNodes), problemInfo, knapsackSolver, fittnessFunction);
     }
 
+    @SuppressWarnings("all")
     private int[] repair(int[] newNodes) {
         int[] counts = new int[newNodes.length];
         for (int i = 0; i < newNodes.length; i++) {

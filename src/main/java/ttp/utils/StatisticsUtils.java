@@ -15,9 +15,11 @@ import ttp.model.Statistics;
 @UtilityClass
 public class StatisticsUtils {
 
+    private static final double DEFAULT = Double.NaN;
+
     public static List<Statistics> analyzeMultiple(List<List<Population>> results) {
-        return transpose(results).stream().map(StatisticsUtils::analyze).map(StatisticsUtils::analyzeStatistics)
-                .collect(Collectors.toList());
+        return StatisticsUtils.transpose(results).stream().map(StatisticsUtils::analyze)
+                .map(StatisticsUtils::analyzeStatistics).collect(Collectors.toList());
     }
 
     public static List<Statistics> analyze(List<Population> results) {
@@ -31,22 +33,22 @@ public class StatisticsUtils {
     }
 
     private static Statistics analyzeStatistics(List<Statistics> statistics) {
-        double avgMin = statistics.stream().mapToDouble(Statistics::getMinValue).average().orElse(0.0);
-        double avgMax = statistics.stream().mapToDouble(Statistics::getMaxValue).average().orElse(0.0);
-        double avgAvg = statistics.stream().mapToDouble(Statistics::getAvgValue).average().orElse(0.0);
+        double avgMin = statistics.stream().mapToDouble(Statistics::getMinValue).average().orElse(DEFAULT);
+        double avgMax = statistics.stream().mapToDouble(Statistics::getMaxValue).average().orElse(DEFAULT);
+        double avgAvg = statistics.stream().mapToDouble(Statistics::getAvgValue).average().orElse(DEFAULT);
         return Statistics.of(avgMin, avgMax, avgAvg);
     }
 
     private static <T> List<List<T>> transpose(List<List<T>> table) {
-        List<List<T>> ret = new ArrayList<List<T>>();
+        List<List<T>> result = new ArrayList<>();
         final int N = table.get(0).size();
         for (int i = 0; i < N; i++) {
-            List<T> col = new ArrayList<T>();
+            List<T> col = new ArrayList<>();
             for (List<T> row : table) {
                 col.add(row.get(i));
             }
-            ret.add(col);
+            result.add(col);
         }
-        return ret;
+        return result;
     }
 }
