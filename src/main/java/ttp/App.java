@@ -47,6 +47,7 @@ public class App {
     private static final String OPTION_HELP_SHORT = "h";
     private static final String OPTION_PROBLEM_SHORT = "p";
     private static final String OPTION_PROPERTIES_SHORT = "g";
+    private static final String OPTION_NUMBER_SHORT = "n";
 
     private static final String DEFAULT_PROPERTIES = "default.properties";
     private static final String BASE_CASES_DIRECTORY = "cases";
@@ -55,8 +56,6 @@ public class App {
     private static final String CHART_FILE_NAME = "chart.png";
     private static final int CHART_WIDTH = 1280;
     private static final int CHART_HEIGHT = 960;
-
-    private static final int NUMBER_OF_RUNS = 10;
 
     private final PrintWriter pw;
     private final PrintWriter epw;
@@ -94,6 +93,8 @@ public class App {
                 .argName("PROBLEM").valueSeparator().required().build());
         opts.addOption(Option.builder(OPTION_PROPERTIES_SHORT).longOpt("geneticProps").desc("genetic properties file")
                 .hasArg().argName("FILE").valueSeparator().required().build());
+        opts.addOption(Option.builder(OPTION_NUMBER_SHORT).longOpt("numberOfRuns").desc("number of runs").hasArg()
+                .argName("N").valueSeparator().required().build());
         return opts;
     }
 
@@ -137,13 +138,15 @@ public class App {
         }
         pw.println(geneticParams);
         pw.println(problem);
+        
         ProblemInfo problemInfo = ProblemInfo.of(problem);
         FitnessFunction fittnessFunction = TtpFitnessFunction.instance();
         KnapsackSolver knapsackSolver = CachedKnapsachSolver
                 .instance(AdvancedGreedyKnapsackSolver.instance(problemInfo));
         Algorithm algorithm = GeneticAlgorithm.instance(fittnessFunction, geneticParams, knapsackSolver);
-        List<List<Population>> solution = Stream.generate(() -> algorithm.solve(problemInfo)).limit(NUMBER_OF_RUNS)
-                .collect(Collectors.toList());
+        List<List<Population>> solution = Stream.generate(() -> algorithm.solve(problemInfo))
+                .limit(Integer.parseInt(line.getOptionValue(OPTION_NUMBER_SHORT))).collect(Collectors.toList());
+        
         List<Statistics> statistics = StatisticsUtils.analyzeMultiple(solution);
         ResultPresenter chartPresenter = XChartResultPresenter.instance(CHART_FILE_NAME, CHART_WIDTH, CHART_HEIGHT);
         ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
