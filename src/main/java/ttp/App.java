@@ -21,6 +21,7 @@ import org.apache.commons.cli.ParseException;
 
 import ttp.algorithm.AdvancedGreedyKnapsackSolver;
 import ttp.algorithm.Algorithm;
+import ttp.algorithm.CachedKnapsachSolver;
 import ttp.algorithm.FitnessFunction;
 import ttp.algorithm.GeneticAlgorithm;
 import ttp.algorithm.KnapsackSolver;
@@ -138,7 +139,8 @@ public class App {
         pw.println(problem);
         ProblemInfo problemInfo = ProblemInfo.of(problem);
         FitnessFunction fittnessFunction = TtpFitnessFunction.instance();
-        KnapsackSolver knapsackSolver = AdvancedGreedyKnapsackSolver.instance(problemInfo);
+        KnapsackSolver knapsackSolver = CachedKnapsachSolver
+                .instance(AdvancedGreedyKnapsackSolver.instance(problemInfo));
         Algorithm algorithm = GeneticAlgorithm.instance(fittnessFunction, geneticParams, knapsackSolver);
         List<List<Population>> solution = Stream.generate(() -> algorithm.solve(problemInfo)).limit(NUMBER_OF_RUNS)
                 .collect(Collectors.toList());
