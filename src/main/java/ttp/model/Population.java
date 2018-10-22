@@ -5,8 +5,8 @@ import java.util.Random;
 
 import lombok.Getter;
 import lombok.ToString;
-import ttp.algorithm.FitnessFunction;
-import ttp.algorithm.KnapsackSolver;
+import ttp.algorithm.fitness.FitnessFunction;
+import ttp.algorithm.greedy.KnapsackSolver;
 import ttp.model.wrapper.ProblemInfo;
 import ttp.utils.ArrayUtils;
 

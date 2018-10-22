@@ -7,8 +7,8 @@ import java.util.Set;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import ttp.algorithm.FitnessFunction;
-import ttp.algorithm.KnapsackSolver;
+import ttp.algorithm.fitness.FitnessFunction;
+import ttp.algorithm.greedy.KnapsackSolver;
 import ttp.model.wrapper.ProblemInfo;
 
 @EqualsAndHashCode

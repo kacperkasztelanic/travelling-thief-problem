@@ -1,4 +1,4 @@
-package ttp.algorithm;
+package ttp.algorithm.greedy;
 
 import ttp.model.Item;
 

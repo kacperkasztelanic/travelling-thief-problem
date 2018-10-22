@@ -20,12 +20,12 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import ttp.algorithm.Algorithm;
-import ttp.algorithm.CachedKnapsachSolver;
-import ttp.algorithm.FitnessFunction;
 import ttp.algorithm.GeneticAlgorithm;
-import ttp.algorithm.KnapsackSolver;
-import ttp.algorithm.SimpleGreedyKnapsackSolver;
-import ttp.algorithm.TtpFitnessFunction;
+import ttp.algorithm.fitness.FitnessFunction;
+import ttp.algorithm.fitness.TtpFitnessFunction;
+import ttp.algorithm.greedy.CachedKnapsachSolver;
+import ttp.algorithm.greedy.KnapsackSolver;
+import ttp.algorithm.greedy.SimpleGreedyKnapsackSolver;
 import ttp.loader.exception.LoadException;
 import ttp.loader.problem.Loader;
 import ttp.loader.problem.LoaderFactory;

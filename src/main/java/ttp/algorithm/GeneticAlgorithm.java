@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
+import ttp.algorithm.fitness.FitnessFunction;
+import ttp.algorithm.greedy.KnapsackSolver;
 import ttp.model.GeneticParams;
 import ttp.model.Individual;
 import ttp.model.Population;
