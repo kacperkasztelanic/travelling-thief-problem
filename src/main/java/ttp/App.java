@@ -19,12 +19,12 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import ttp.algorithm.AdvancedGreedyKnapsackSolver;
 import ttp.algorithm.Algorithm;
 import ttp.algorithm.CachedKnapsachSolver;
 import ttp.algorithm.FitnessFunction;
 import ttp.algorithm.GeneticAlgorithm;
 import ttp.algorithm.KnapsackSolver;
+import ttp.algorithm.SimpleGreedyKnapsackSolver;
 import ttp.algorithm.TtpFitnessFunction;
 import ttp.loader.exception.LoadException;
 import ttp.loader.problem.Loader;
@@ -142,7 +142,7 @@ public class App {
         ProblemInfo problemInfo = ProblemInfo.of(problem);
         FitnessFunction fittnessFunction = TtpFitnessFunction.instance();
         KnapsackSolver knapsackSolver = CachedKnapsachSolver
-                .instance(AdvancedGreedyKnapsackSolver.instance(problemInfo));
+                .instance(SimpleGreedyKnapsackSolver.instance(problemInfo));
         Algorithm algorithm = GeneticAlgorithm.instance(fittnessFunction, geneticParams, knapsackSolver);
         List<List<Population>> solution = Stream.generate(() -> algorithm.solve(problemInfo))
                 .limit(Integer.parseInt(line.getOptionValue(OPTION_NUMBER_SHORT))).collect(Collectors.toList());
