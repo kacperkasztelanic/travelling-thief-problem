@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,8 +20,11 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import com.oracle.webservices.internal.api.message.PropertySet.Property;
+
 import ttp.algorithm.Algorithm;
 import ttp.algorithm.GeneticAlgorithm;
+import ttp.algorithm.TabuSearch;
 import ttp.algorithm.fitness.FitnessFunction;
 import ttp.algorithm.fitness.TtpFitnessFunction;
 import ttp.algorithm.greedy.CachedKnapsachSolver;
@@ -31,15 +35,13 @@ import ttp.loader.problem.Loader;
 import ttp.loader.problem.LoaderFactory;
 import ttp.loader.properties.PropertyLoader;
 import ttp.loader.properties.PropertyLoaderFactory;
-import ttp.model.GeneticParams;
-import ttp.model.Population;
+import ttp.model.Individual;
 import ttp.model.Problem;
-import ttp.model.PropertyGeneticParamsProvider;
-import ttp.model.Statistics;
+import ttp.model.params.GeneticParams;
+import ttp.model.params.PropertyGeneticParamsProvider;
+import ttp.model.params.PropertyTabuSearchParamsProvider;
+import ttp.model.params.TabuSearchParams;
 import ttp.model.wrapper.ProblemInfo;
-import ttp.presenter.ConsoleResultPresenter;
-import ttp.presenter.ResultPresenter;
-import ttp.presenter.XChartResultPresenter;
 import ttp.utils.StatisticsUtils;
 
 public class App {
@@ -123,35 +125,46 @@ public class App {
     }
 
     public void runInternal(CommandLine line) {
+        long runs = Long.parseLong(line.getOptionValue(OPTION_NUMBER_SHORT));
         String resource = BASE_CASES_DIRECTORY + "/" + line.getOptionValue(OPTION_PROBLEM_SHORT);
         String propertyFile = Paths.get(line.getOptionValue(OPTION_PROPERTIES_SHORT)).normalize().toString();
         PropertyLoader propertyLoader = PropertyLoaderFactory.getInstance(DEFAULT_PROPERTIES);
         GeneticParams geneticParams = null;
+        TabuSearchParams tabuSearchParams = null;
         Loader loader = LoaderFactory.getInstance();
         Problem problem = null;
         try {
-            geneticParams = PropertyGeneticParamsProvider.forProperties(propertyLoader.load(propertyFile));
             problem = loader.load(resource);
+            Properties properties = propertyLoader.load(propertyFile);
+            geneticParams = PropertyGeneticParamsProvider.forProperties(properties);
+            tabuSearchParams = PropertyTabuSearchParamsProvider.forProperties(properties);
         } catch (LoadException e) {
             e.printStackTrace(epw);
             return;
         }
-        pw.println(geneticParams);
         pw.println(problem);
-        
+        pw.println(geneticParams);
+        pw.println(tabuSearchParams);
+
         ProblemInfo problemInfo = ProblemInfo.of(problem);
         FitnessFunction fittnessFunction = TtpFitnessFunction.instance();
-        KnapsackSolver knapsackSolver = CachedKnapsachSolver
-                .instance(SimpleGreedyKnapsackSolver.instance(problemInfo));
-        Algorithm algorithm = GeneticAlgorithm.instance(fittnessFunction, geneticParams, knapsackSolver);
-        List<List<Population>> solution = Stream.generate(() -> algorithm.solve(problemInfo))
-                .limit(Integer.parseInt(line.getOptionValue(OPTION_NUMBER_SHORT))).collect(Collectors.toList());
-        
-        List<Statistics> statistics = StatisticsUtils.analyzeMultiple(solution);
-        ResultPresenter chartPresenter = XChartResultPresenter.instance(CHART_FILE_NAME, CHART_WIDTH, CHART_HEIGHT);
-        ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
-        chartPresenter.present(statistics);
-        consolePresenter.present(statistics);
+        KnapsackSolver knapsackSolver = CachedKnapsachSolver.instance(SimpleGreedyKnapsackSolver.instance(problemInfo));
+        Algorithm geneticAlgorithm = GeneticAlgorithm.instance(fittnessFunction, geneticParams, knapsackSolver);
+        List<Individual> geneticAlgorithmSolution = Stream.generate(() -> geneticAlgorithm.solveForBest(problemInfo))
+                .limit(runs).collect(Collectors.toList());
+        System.out.println("GA");
+        Algorithm tabuSearch = TabuSearch.instance(fittnessFunction, tabuSearchParams, knapsackSolver);
+        List<Individual> tabuSearchSolution = Stream.generate(() -> tabuSearch.solveForBest(problemInfo))
+                .limit(runs * tabuSearchParams.getMultiplier()).collect(Collectors.toList());
+        pw.println("GA: " + StatisticsUtils.analyzeBestResults(geneticAlgorithmSolution));
+        pw.println("TS: " + StatisticsUtils.analyzeBestResults(tabuSearchSolution));
+
+        // List<Statistics> statistics = StatisticsUtils.analyzeMultiple(solution);
+        // ResultPresenter chartPresenter =
+        // XChartResultPresenter.instance(CHART_FILE_NAME, CHART_WIDTH, CHART_HEIGHT);
+        // ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
+        // chartPresenter.present(statistics);
+        // consolePresenter.present(statistics);
     }
 
     @SuppressWarnings("all")

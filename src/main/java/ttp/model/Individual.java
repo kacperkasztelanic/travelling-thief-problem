@@ -17,27 +17,6 @@ public class Individual {
     private static final int DIVISION_POINT_RATIO = 2;
     private static final Random random = new Random();
 
-    public static Individual of(int[] nodes, ProblemInfo problemInfo, KnapsackSolver knapsackSolver,
-            FitnessFunction fittnessFunction) {
-        return new Individual(nodes, knapsackSolver.solve(nodes), problemInfo, knapsackSolver, fittnessFunction);
-    }
-
-    public static Individual of(Individual individual) {
-        int[] newNodes = Arrays.copyOf(individual.getNodes(), individual.getNodes().length);
-        Item[] newItems = Arrays.copyOf(individual.getItems(), individual.getItems().length);
-        return new Individual(newNodes, newItems, individual.problemInfo, individual.knapsackSolver,
-                individual.fittnessFunction);
-    }
-
-    private Individual(int[] nodes, Item[] items, ProblemInfo problemInfo, KnapsackSolver knapsackSolver,
-            FitnessFunction fittnessFunction) {
-        this.nodes = nodes;
-        this.items = items;
-        this.problemInfo = problemInfo;
-        this.knapsackSolver = knapsackSolver;
-        this.fittnessFunction = fittnessFunction;
-    }
-
     @Getter
     private final int[] nodes;
     @Getter
@@ -45,13 +24,34 @@ public class Individual {
 
     private final ProblemInfo problemInfo;
     private final KnapsackSolver knapsackSolver;
-    private final FitnessFunction fittnessFunction;
+    private final FitnessFunction fitnessFunction;
 
     private Result result;
 
+    public static Individual of(int[] nodes, ProblemInfo problemInfo, KnapsackSolver knapsackSolver,
+            FitnessFunction fitnessFunction) {
+        return new Individual(nodes, knapsackSolver.solve(nodes), problemInfo, knapsackSolver, fitnessFunction);
+    }
+
+    public static Individual of(Individual individual) {
+        int[] newNodes = Arrays.copyOf(individual.getNodes(), individual.getNodes().length);
+        Item[] newItems = Arrays.copyOf(individual.getItems(), individual.getItems().length);
+        return new Individual(newNodes, newItems, individual.problemInfo, individual.knapsackSolver,
+                individual.fitnessFunction);
+    }
+
+    private Individual(int[] nodes, Item[] items, ProblemInfo problemInfo, KnapsackSolver knapsackSolver,
+            FitnessFunction fitnessFunction) {
+        this.nodes = nodes;
+        this.items = items;
+        this.problemInfo = problemInfo;
+        this.knapsackSolver = knapsackSolver;
+        this.fitnessFunction = fitnessFunction;
+    }
+
     public Result getResult() {
         if (result == null) {
-            result = fittnessFunction.calculate(problemInfo, this);
+            result = fitnessFunction.calculate(problemInfo, this);
         }
         return result;
     }
@@ -67,7 +67,7 @@ public class Individual {
                 newNodes[j] = temp;
             }
         }
-        return Individual.of(newNodes, problemInfo, knapsackSolver, fittnessFunction);
+        return Individual.of(newNodes, problemInfo, knapsackSolver, fitnessFunction);
     }
 
     public Individual crossover(Individual other) {
@@ -75,7 +75,7 @@ public class Individual {
         int[] newNodes = new int[nodes.length];
         System.arraycopy(nodes, 0, newNodes, 0, divisionPoint);
         System.arraycopy(other.nodes, divisionPoint, newNodes, divisionPoint, nodes.length - divisionPoint);
-        return Individual.of(repair(newNodes), problemInfo, knapsackSolver, fittnessFunction);
+        return Individual.of(repair(newNodes), problemInfo, knapsackSolver, fitnessFunction);
     }
 
     @SuppressWarnings("all")

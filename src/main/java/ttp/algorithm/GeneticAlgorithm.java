@@ -7,9 +7,9 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import ttp.algorithm.fitness.FitnessFunction;
 import ttp.algorithm.greedy.KnapsackSolver;
-import ttp.model.GeneticParams;
 import ttp.model.Individual;
 import ttp.model.Population;
+import ttp.model.params.GeneticParams;
 import ttp.model.wrapper.ProblemInfo;
 
 @AllArgsConstructor(staticName = "instance")
@@ -22,7 +22,7 @@ public class GeneticAlgorithm implements Algorithm {
     @Override
     public Individual solveForBest(ProblemInfo problemInfo) {
         return solve(problemInfo).stream().map(Population::getMembers).flatMap(Arrays::stream)
-                .max((a, b) -> Double.compare(b.getResult().getValue(), a.getResult().getValue()))
+                .max((a, b) -> Double.compare(a.getResult().getValue(), b.getResult().getValue()))
                 .orElseThrow(IllegalStateException::new);
     }
 

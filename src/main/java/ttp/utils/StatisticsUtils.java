@@ -17,6 +17,10 @@ public class StatisticsUtils {
 
     private static final double DEFAULT = Double.NaN;
 
+    public static double analyzeBestResults(List<Individual> results) {
+        return results.stream().mapToDouble(i -> i.getResult().getValue()).average().orElse(DEFAULT);
+    }
+
     public static List<Statistics> analyzeMultiple(List<List<Population>> results) {
         return StatisticsUtils.transpose(results).stream().map(StatisticsUtils::analyze)
                 .map(StatisticsUtils::analyzeStatistics).collect(Collectors.toList());

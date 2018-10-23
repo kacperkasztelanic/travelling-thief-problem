@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.ToString;
 import ttp.algorithm.fitness.FitnessFunction;
 import ttp.algorithm.greedy.KnapsackSolver;
+import ttp.model.params.GeneticParams;
 import ttp.model.wrapper.ProblemInfo;
 import ttp.utils.ArrayUtils;
 

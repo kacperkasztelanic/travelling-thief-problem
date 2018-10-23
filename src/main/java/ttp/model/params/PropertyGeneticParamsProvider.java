@@ -1,9 +1,9 @@
-package ttp.model;
+package ttp.model.params;
 
 import java.util.Properties;
 
 import lombok.Getter;
-import ttp.model.GeneticParams.GeneticParamsBuilder;
+import ttp.model.params.GeneticParams.GeneticParamsBuilder;
 
 public class PropertyGeneticParamsProvider {
 

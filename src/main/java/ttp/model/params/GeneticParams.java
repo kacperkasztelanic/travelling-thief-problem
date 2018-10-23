@@ -1,4 +1,4 @@
-package ttp.model;
+package ttp.model.params;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -25,5 +25,4 @@ public class GeneticParams {
                 + ", crossoverProbability: " + crossoverProbability + ", mutationProbability: " + mutationProbability
                 + ", tournamentSize: " + tournamentSize + ")";
     }
-
 }
