@@ -10,6 +10,7 @@ public class SimpleGreedyKnapsackSolver implements KnapsackSolver {
 
     private final ProblemInfo problemInfo;
     private final Item[] itemsByValueToWeightRatio;
+    private final Item[] knapsack;
 
     public static SimpleGreedyKnapsackSolver instance(ProblemInfo problemInfo) {
         return new SimpleGreedyKnapsackSolver(problemInfo);
@@ -18,11 +19,12 @@ public class SimpleGreedyKnapsackSolver implements KnapsackSolver {
     private SimpleGreedyKnapsackSolver(ProblemInfo problemInfo) {
         this.problemInfo = problemInfo;
         this.itemsByValueToWeightRatio = itemsByValueToWeightRatio();
+        this.knapsack = fillKnapsack();
     }
 
     @Override
     public Item[] solve(int[] nodes) {
-        return fillKnapsack();
+        return knapsack;
     }
 
     private Item[] itemsByValueToWeightRatio() {
