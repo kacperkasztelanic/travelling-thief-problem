@@ -34,9 +34,8 @@ public class TabuSearch implements Algorithm {
         int[] currentSolution = ArrayUtils
                 .shuffledCopy(problemInfo.getProblem().getNodes().stream().mapToInt(Node::getId).toArray());
         int numberOfIterations = tabuSearchParams.getIterations();
-        int tabuSize = problemInfo.getProblem().getDimension();
 
-        Tabu tabuList = Tabu.of(tabuSize);
+        Tabu tabuList = Tabu.of(problemInfo.getProblem().getDimension(), tabuSearchParams.getTabuDuration());
         int[] bestSolution = Arrays.copyOf(currentSolution, currentSolution.length);
         Result bestResult = Individual.of(bestSolution, problemInfo, knapsackSolver, fitnessFunction).getResult();
 
@@ -96,13 +95,15 @@ public class TabuSearch implements Algorithm {
     private static class Tabu {
 
         private final int[][] tabus;
+        private final int tabuDuration;
 
-        public static Tabu of(int numberOfNodes) {
-            return new Tabu(numberOfNodes);
+        public static Tabu of(int numberOfNodes, int tabuDuration) {
+            return new Tabu(numberOfNodes, tabuDuration);
         }
 
-        private Tabu(int numberOfNodes) {
-            tabus = new int[numberOfNodes][numberOfNodes];
+        private Tabu(int numberOfNodes, int tabuDuration) {
+            this.tabus = new int[numberOfNodes][numberOfNodes];
+            this.tabuDuration = tabuDuration;
         }
 
         public int getTabuValue(int i, int j) {
@@ -110,8 +111,8 @@ public class TabuSearch implements Algorithm {
         }
 
         public void tabuMove(int node1, int node2) {
-            tabus[node1][node2] += 5;
-            tabus[node2][node1] += 5;
+            tabus[node1][node2] += tabuDuration;
+            tabus[node2][node1] += tabuDuration;
         }
 
         public void decrementTabu() {

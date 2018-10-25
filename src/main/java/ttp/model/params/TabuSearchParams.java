@@ -12,9 +12,12 @@ public class TabuSearchParams {
     private final int iterations;
     @Getter
     private final int multiplier;
+    @Getter
+    private final int tabuDuration;
 
     @Override
     public String toString() {
-        return "TabuSearchParams(iterations: " + iterations + ", multiplier: " + multiplier + ")";
+        return "TabuSearchParams(iterations: " + iterations + ", multiplier: " + multiplier + ", tabuDurarion: "
+                + tabuDuration + ")";
     }
 }
