@@ -1,7 +1,8 @@
 package ttp.algorithm;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -11,43 +12,39 @@ import ttp.algorithm.fitness.FitnessFunction;
 import ttp.algorithm.greedy.KnapsackSolver;
 import ttp.model.Individual;
 import ttp.model.Node;
-import ttp.model.Population;
 import ttp.model.Result;
 import ttp.model.params.TabuSearchParams;
 import ttp.model.wrapper.ProblemInfo;
 import ttp.utils.ArrayUtils;
 
 @AllArgsConstructor(staticName = "instance")
-public class TabuSearch implements Algorithm {
+public class TabuSearch implements Algorithm<Individual> {
 
     private final FitnessFunction fitnessFunction;
     private final TabuSearchParams tabuSearchParams;
     private final KnapsackSolver knapsackSolver;
 
     @Override
-    public List<Population> solve(ProblemInfo problemInfo) {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public Individual solveForBest(ProblemInfo problemInfo) {
+    public List<Individual> solve(ProblemInfo problemInfo) {
         int[] currentSolution = ArrayUtils
                 .shuffledCopy(problemInfo.getProblem().getNodes().stream().mapToInt(Node::getId).toArray());
         int numberOfIterations = tabuSearchParams.getIterations();
 
         Tabu tabuList = Tabu.of(problemInfo.getProblem().getDimension(), tabuSearchParams.getTabuDuration());
-        int[] bestSolution = Arrays.copyOf(currentSolution, currentSolution.length);
-        Result bestResult = Individual.of(bestSolution, problemInfo, knapsackSolver, fitnessFunction).getResult();
 
+        List<Individual> solutions = new ArrayList<>();
         for (int i = 0; i < numberOfIterations; i++) {
             currentSolution = getBestNeighbour(tabuList, currentSolution, problemInfo);
-            Result currentResult = Individual.of(currentSolution, problemInfo, knapsackSolver, fitnessFunction)
-                    .getResult();
-            if (currentResult.getValue() > bestResult.getValue()) {
-                bestSolution = Arrays.copyOf(currentSolution, currentSolution.length);
-            }
+            Individual current = Individual.of(currentSolution, problemInfo, knapsackSolver, fitnessFunction);
+            solutions.add(current);
         }
-        return Individual.of(bestSolution, problemInfo, knapsackSolver, fitnessFunction);
+        return solutions;
+    }
+
+    @Override
+    public Individual solveForBest(ProblemInfo problemInfo) {
+        return solve(problemInfo).stream().max(Comparator.comparingDouble(i -> i.getResult().getValue()))
+                .orElseThrow(IllegalStateException::new);
     }
 
     private int[] getBestNeighbour(Tabu tabuList, int[] initSolution, ProblemInfo problemInfo) {

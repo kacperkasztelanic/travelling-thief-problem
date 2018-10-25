@@ -20,8 +20,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import com.oracle.webservices.internal.api.message.PropertySet.Property;
-
 import ttp.algorithm.Algorithm;
 import ttp.algorithm.GeneticAlgorithm;
 import ttp.algorithm.TabuSearch;
@@ -36,6 +34,7 @@ import ttp.loader.problem.LoaderFactory;
 import ttp.loader.properties.PropertyLoader;
 import ttp.loader.properties.PropertyLoaderFactory;
 import ttp.model.Individual;
+import ttp.model.Population;
 import ttp.model.Problem;
 import ttp.model.params.GeneticParams;
 import ttp.model.params.PropertyGeneticParamsProvider;
@@ -149,11 +148,12 @@ public class App {
         ProblemInfo problemInfo = ProblemInfo.of(problem);
         FitnessFunction fittnessFunction = TtpFitnessFunction.instance();
         KnapsackSolver knapsackSolver = CachedKnapsachSolver.instance(SimpleGreedyKnapsackSolver.instance(problemInfo));
-        Algorithm geneticAlgorithm = GeneticAlgorithm.instance(fittnessFunction, geneticParams, knapsackSolver);
+        Algorithm<Population> geneticAlgorithm = GeneticAlgorithm.instance(fittnessFunction, geneticParams,
+                knapsackSolver);
         List<Individual> geneticAlgorithmSolution = Stream.generate(() -> geneticAlgorithm.solveForBest(problemInfo))
                 .limit(runs).collect(Collectors.toList());
         System.out.println("GA");
-        Algorithm tabuSearch = TabuSearch.instance(fittnessFunction, tabuSearchParams, knapsackSolver);
+        Algorithm<Individual> tabuSearch = TabuSearch.instance(fittnessFunction, tabuSearchParams, knapsackSolver);
         List<Individual> tabuSearchSolution = Stream.generate(() -> tabuSearch.solveForBest(problemInfo))
                 .limit(runs * tabuSearchParams.getMultiplier()).collect(Collectors.toList());
         pw.println("GA: " + StatisticsUtils.analyzeBestResults(geneticAlgorithmSolution));

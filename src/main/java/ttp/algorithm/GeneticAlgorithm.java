@@ -13,7 +13,7 @@ import ttp.model.params.GeneticParams;
 import ttp.model.wrapper.ProblemInfo;
 
 @AllArgsConstructor(staticName = "instance")
-public class GeneticAlgorithm implements Algorithm {
+public class GeneticAlgorithm implements Algorithm<Population> {
 
     private final FitnessFunction fittnessFunction;
     private final GeneticParams geneticParams;
