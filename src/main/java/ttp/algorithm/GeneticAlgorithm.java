@@ -20,13 +20,6 @@ public class GeneticAlgorithm implements Algorithm<Population> {
     private final KnapsackSolver knapsackSolver;
 
     @Override
-    public Individual solveForBest(ProblemInfo problemInfo) {
-        return solve(problemInfo).stream().map(Population::getMembers).flatMap(Arrays::stream)
-                .max((a, b) -> Double.compare(a.getResult().getValue(), b.getResult().getValue()))
-                .orElseThrow(IllegalStateException::new);
-    }
-
-    @Override
     public List<Population> solve(ProblemInfo problemInfo) {
         List<Population> generations = new ArrayList<>(geneticParams.getNumberOfGenerations());
         Population first = Population.randomPopulation(geneticParams, problemInfo, knapsackSolver, fittnessFunction);
@@ -35,5 +28,12 @@ public class GeneticAlgorithm implements Algorithm<Population> {
             generations.add(generations.get(i - 1).nextGeneration());
         }
         return generations;
+    }
+
+    @Override
+    public Individual solveForBest(ProblemInfo problemInfo) {
+        return solve(problemInfo).stream().map(Population::getMembers).flatMap(Arrays::stream)
+                .max((a, b) -> Double.compare(a.getResult().getValue(), b.getResult().getValue()))
+                .orElseThrow(IllegalStateException::new);
     }
 }

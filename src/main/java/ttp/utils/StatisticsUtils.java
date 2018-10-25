@@ -17,21 +17,23 @@ public class StatisticsUtils {
 
     private static final double DEFAULT = Double.NaN;
 
-    public static double analyzeBestResults(List<Individual> results) {
-        return results.stream().mapToDouble(i -> i.getResult().getValue()).average().orElse(DEFAULT);
-    }
-
-    public static List<Statistics> analyzeMultiple(List<List<Population>> results) {
-        return StatisticsUtils.transpose(results).stream().map(StatisticsUtils::analyze)
+    public static List<Statistics> analyzeMultiplePopulationLists(List<List<Population>> results) {
+        return StatisticsUtils.transpose(results).stream().map(StatisticsUtils::analyzePopulations)
                 .map(StatisticsUtils::analyzeStatistics).collect(Collectors.toList());
     }
 
-    public static List<Statistics> analyze(List<Population> results) {
-        return results.stream().map(StatisticsUtils::analyze).collect(Collectors.toList());
+    public static List<Statistics> analyzeMultipleIndividualLists(List<List<Individual>> results) {
+        return StatisticsUtils.transpose(results).stream().map(StatisticsUtils::analyzeIndividuals)
+                .collect(Collectors.toList());
     }
 
-    public static Statistics analyze(Population results) {
-        DoubleSummaryStatistics internalStatistics = Arrays.stream(results.getMembers()).map(Individual::getResult)
+    public static List<Statistics> analyzePopulations(List<Population> results) {
+        return results.stream().map(p -> Arrays.asList(p.getMembers())).map(StatisticsUtils::analyzeIndividuals)
+                .collect(Collectors.toList());
+    }
+
+    public static Statistics analyzeIndividuals(List<Individual> results) {
+        DoubleSummaryStatistics internalStatistics = results.stream().map(Individual::getResult)
                 .collect(Collectors.summarizingDouble(Result::getValue));
         return Statistics.of(internalStatistics.getMin(), internalStatistics.getMax(), internalStatistics.getAverage());
     }

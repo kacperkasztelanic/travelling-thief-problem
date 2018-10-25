@@ -31,7 +31,6 @@ public class TabuSearch implements Algorithm<Individual> {
         int numberOfIterations = tabuSearchParams.getIterations();
 
         Tabu tabuList = Tabu.of(problemInfo.getProblem().getDimension(), tabuSearchParams.getTabuDuration());
-
         List<Individual> solutions = new ArrayList<>();
         for (int i = 0; i < numberOfIterations; i++) {
             currentSolution = getBestNeighbour(tabuList, currentSolution, problemInfo);

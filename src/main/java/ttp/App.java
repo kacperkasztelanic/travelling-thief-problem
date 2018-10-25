@@ -36,11 +36,15 @@ import ttp.loader.properties.PropertyLoaderFactory;
 import ttp.model.Individual;
 import ttp.model.Population;
 import ttp.model.Problem;
+import ttp.model.Statistics;
 import ttp.model.params.GeneticParams;
 import ttp.model.params.PropertyGeneticParamsProvider;
 import ttp.model.params.PropertyTabuSearchParamsProvider;
 import ttp.model.params.TabuSearchParams;
 import ttp.model.wrapper.ProblemInfo;
+import ttp.presenter.ConsoleResultPresenter;
+import ttp.presenter.ResultPresenter;
+import ttp.presenter.XChartResultPresenter;
 import ttp.utils.StatisticsUtils;
 
 public class App {
@@ -54,7 +58,6 @@ public class App {
     private static final String BASE_CASES_DIRECTORY = "cases";
     private static final String INDEX_FILE = "index";
 
-    private static final String CHART_FILE_NAME = "chart.png";
     private static final int CHART_WIDTH = 1280;
     private static final int CHART_HEIGHT = 960;
 
@@ -150,21 +153,22 @@ public class App {
         KnapsackSolver knapsackSolver = CachedKnapsachSolver.instance(SimpleGreedyKnapsackSolver.instance(problemInfo));
         Algorithm<Population> geneticAlgorithm = GeneticAlgorithm.instance(fittnessFunction, geneticParams,
                 knapsackSolver);
-        List<Individual> geneticAlgorithmSolution = Stream.generate(() -> geneticAlgorithm.solveForBest(problemInfo))
+        List<List<Population>> geneticAlgorithmSolution = Stream.generate(() -> geneticAlgorithm.solve(problemInfo))
                 .limit(runs).collect(Collectors.toList());
-        System.out.println("GA");
-        Algorithm<Individual> tabuSearch = TabuSearch.instance(fittnessFunction, tabuSearchParams, knapsackSolver);
-        List<Individual> tabuSearchSolution = Stream.generate(() -> tabuSearch.solveForBest(problemInfo))
-                .limit(runs * tabuSearchParams.getMultiplier()).collect(Collectors.toList());
-        pw.println("GA: " + StatisticsUtils.analyzeBestResults(geneticAlgorithmSolution));
-        pw.println("TS: " + StatisticsUtils.analyzeBestResults(tabuSearchSolution));
 
-        // List<Statistics> statistics = StatisticsUtils.analyzeMultiple(solution);
-        // ResultPresenter chartPresenter =
-        // XChartResultPresenter.instance(CHART_FILE_NAME, CHART_WIDTH, CHART_HEIGHT);
-        // ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
-        // chartPresenter.present(statistics);
-        // consolePresenter.present(statistics);
+        Algorithm<Individual> tabuSearch = TabuSearch.instance(fittnessFunction, tabuSearchParams, knapsackSolver);
+        List<List<Individual>> tabuSearchSolution = Stream.generate(() -> tabuSearch.solve(problemInfo))
+                .limit(runs * tabuSearchParams.getMultiplier()).collect(Collectors.toList());
+
+        List<Statistics> gaStatistics = StatisticsUtils.analyzeMultiplePopulationLists(geneticAlgorithmSolution);
+        List<Statistics> tabuStatistics = StatisticsUtils.analyzeMultipleIndividualLists(tabuSearchSolution);
+        XChartResultPresenter.instance("ga.png", CHART_WIDTH, CHART_HEIGHT).present(gaStatistics);
+        XChartResultPresenter.instance("tabu.png", CHART_WIDTH, CHART_HEIGHT).present(tabuStatistics);
+        ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
+        pw.println("GeneticAlgorithm statistics:");
+        consolePresenter.present(gaStatistics);
+        pw.println("TabuSearch statistics:");
+        consolePresenter.present(tabuStatistics);
     }
 
     @SuppressWarnings("all")
