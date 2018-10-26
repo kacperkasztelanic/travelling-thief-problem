@@ -1,4 +1,4 @@
-package ttp.presenter;
+package ttp.presenter.ga;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class JFreeChartResultPresenter extends AbstractChartResultPresenter {
     public void present(List<Statistics> results) {
         JFreeChart chart = prepareChart(results);
         try {
-            saveChartAsPng(chart, file, width, height);
+            saveChartAsPng(chart);
         } catch (IOException e) {
             // nothing to do here
         }
@@ -43,7 +43,7 @@ public class JFreeChartResultPresenter extends AbstractChartResultPresenter {
                 false, false);
     }
 
-    private void saveChartAsPng(JFreeChart chart, String file, int width, int height) throws IOException {
+    private void saveChartAsPng(JFreeChart chart) throws IOException {
         File chartFile = new File(file);
         ChartUtils.saveChartAsPNG(chartFile, chart, width, height);
     }

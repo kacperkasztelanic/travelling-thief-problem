@@ -42,9 +42,10 @@ import ttp.model.params.PropertyGeneticParamsProvider;
 import ttp.model.params.PropertyTabuSearchParamsProvider;
 import ttp.model.params.TabuSearchParams;
 import ttp.model.wrapper.ProblemInfo;
-import ttp.presenter.ConsoleResultPresenter;
-import ttp.presenter.ResultPresenter;
-import ttp.presenter.XChartResultPresenter;
+import ttp.presenter.ga.ConsoleResultPresenter;
+import ttp.presenter.ga.ResultPresenter;
+import ttp.presenter.ga.XChartResultPresenter;
+import ttp.presenter.tabu.TabuXChartResultPresenter;
 import ttp.utils.StatisticsUtils;
 
 public class App {
@@ -163,7 +164,7 @@ public class App {
         List<Statistics> gaStatistics = StatisticsUtils.analyzeMultiplePopulationLists(geneticAlgorithmSolution);
         List<Statistics> tabuStatistics = StatisticsUtils.analyzeMultipleIndividualLists(tabuSearchSolution);
         XChartResultPresenter.instance("ga.png", CHART_WIDTH, CHART_HEIGHT).present(gaStatistics);
-        XChartResultPresenter.instance("tabu.png", CHART_WIDTH, CHART_HEIGHT).present(tabuStatistics);
+        TabuXChartResultPresenter.instance("tabu.png", CHART_WIDTH, CHART_HEIGHT).present(tabuStatistics);
         ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
         pw.println("GeneticAlgorithm statistics:");
         consolePresenter.present(gaStatistics);

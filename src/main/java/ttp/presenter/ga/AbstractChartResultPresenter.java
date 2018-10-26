@@ -1,4 +1,4 @@
-package ttp.presenter;
+package ttp.presenter.ga;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

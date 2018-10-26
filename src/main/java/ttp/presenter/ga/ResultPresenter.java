@@ -1,4 +1,4 @@
-package ttp.presenter;
+package ttp.presenter.ga;
 
 import java.util.List;
 
