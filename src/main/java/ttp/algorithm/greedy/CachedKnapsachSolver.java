@@ -1,10 +1,10 @@
 package ttp.algorithm.greedy;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import ttp.model.Item;
@@ -28,11 +28,36 @@ public class CachedKnapsachSolver implements KnapsackSolver {
     }
 
     @AllArgsConstructor(staticName = "of")
-    @EqualsAndHashCode
     @ToString(includeFieldNames = false)
     private static class IntArrayWrapper {
-        
+
         @Getter
         private final int[] array;
+
+        @Override
+        public int hashCode() {
+            return Arrays.hashCode(array);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            IntArrayWrapper other = (IntArrayWrapper) obj;
+            if (hashCode() != other.hashCode()) {
+                return false;
+            }
+            if (!Arrays.equals(array, other.array)) {
+                return false;
+            }
+            return true;
+        }
     }
 }
