@@ -21,8 +21,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import ttp.algorithm.Algorithm;
-import ttp.algorithm.GeneticAlgorithm;
-import ttp.algorithm.TabuSearch;
+import ttp.algorithm.SimulatedAnnealing;
 import ttp.algorithm.fitness.FitnessFunction;
 import ttp.algorithm.fitness.TtpFitnessFunction;
 import ttp.algorithm.greedy.CachedKnapsachSolver;
@@ -34,18 +33,18 @@ import ttp.loader.problem.LoaderFactory;
 import ttp.loader.properties.PropertyLoader;
 import ttp.loader.properties.PropertyLoaderFactory;
 import ttp.model.Individual;
-import ttp.model.Population;
 import ttp.model.Problem;
 import ttp.model.Statistics;
 import ttp.model.params.GeneticParams;
 import ttp.model.params.PropertyGeneticParamsProvider;
+import ttp.model.params.PropertySimulatedAnnealingParamsProvider;
 import ttp.model.params.PropertyTabuSearchParamsProvider;
+import ttp.model.params.SimulatedAnnealingParams;
 import ttp.model.params.TabuSearchParams;
 import ttp.model.wrapper.ProblemInfo;
-import ttp.presenter.ga.ConsoleResultPresenter;
-import ttp.presenter.ga.ResultPresenter;
-import ttp.presenter.ga.XChartResultPresenter;
-import ttp.presenter.tabu.TabuXChartResultPresenter;
+import ttp.presenter.ConsoleResultPresenter;
+import ttp.presenter.ResultPresenter;
+import ttp.presenter.TsSaXChartResultPresenter;
 import ttp.utils.StatisticsUtils;
 
 public class App {
@@ -134,6 +133,7 @@ public class App {
         PropertyLoader propertyLoader = PropertyLoaderFactory.getInstance(DEFAULT_PROPERTIES);
         GeneticParams geneticParams = null;
         TabuSearchParams tabuSearchParams = null;
+        SimulatedAnnealingParams simulatedAnnealingParams = null;
         Loader loader = LoaderFactory.getInstance();
         Problem problem = null;
         try {
@@ -141,6 +141,7 @@ public class App {
             Properties properties = propertyLoader.load(propertyFile);
             geneticParams = PropertyGeneticParamsProvider.forProperties(properties);
             tabuSearchParams = PropertyTabuSearchParamsProvider.forProperties(properties);
+            simulatedAnnealingParams = PropertySimulatedAnnealingParamsProvider.forProperties(properties);
         } catch (LoadException e) {
             e.printStackTrace(epw);
             return;
@@ -148,28 +149,42 @@ public class App {
         pw.println(problem);
         pw.println(geneticParams);
         pw.println(tabuSearchParams);
+        pw.println(simulatedAnnealingParams);
 
         ProblemInfo problemInfo = ProblemInfo.of(problem);
-        FitnessFunction fittnessFunction = TtpFitnessFunction.instance();
+        FitnessFunction fitnessFunction = TtpFitnessFunction.instance();
         KnapsackSolver knapsackSolver = CachedKnapsachSolver.instance(SimpleGreedyKnapsackSolver.instance(problemInfo));
-        Algorithm<Population> geneticAlgorithm = GeneticAlgorithm.instance(fittnessFunction, geneticParams,
-                knapsackSolver);
-        List<List<Population>> geneticAlgorithmSolution = Stream.generate(() -> geneticAlgorithm.solve(problemInfo))
-                .limit(runs).collect(Collectors.toList());
+        // Algorithm<Population> geneticAlgorithm =
+        // GeneticAlgorithm.instance(fitnessFunction, geneticParams,
+        // knapsackSolver);
+        // List<List<Population>> geneticAlgorithmSolution = Stream.generate(() ->
+        // geneticAlgorithm.solve(problemInfo))
+        // .limit(runs).collect(Collectors.toList());
+        //
+        // Algorithm<Individual> tabuSearch = TabuSearch.instance(fitnessFunction,
+        // tabuSearchParams, knapsackSolver);
+        // List<List<Individual>> tabuSearchSolution = Stream.generate(() ->
+        // tabuSearch.solve(problemInfo))
+        // .limit(runs * tabuSearchParams.getMultiplier()).collect(Collectors.toList());
 
-        Algorithm<Individual> tabuSearch = TabuSearch.instance(fittnessFunction, tabuSearchParams, knapsackSolver);
-        List<List<Individual>> tabuSearchSolution = Stream.generate(() -> tabuSearch.solve(problemInfo))
-                .limit(runs * tabuSearchParams.getMultiplier()).collect(Collectors.toList());
+        Algorithm<Individual> simulatedAnnealing = SimulatedAnnealing.instance(fitnessFunction,
+                simulatedAnnealingParams, knapsackSolver);
+        List<List<Individual>> simulatedAnnealingSolution = Stream
+                .generate(() -> simulatedAnnealing.solve(problemInfo)).limit(runs).collect(Collectors.toList());
 
-        List<Statistics> gaStatistics = StatisticsUtils.analyzeMultiplePopulationLists(geneticAlgorithmSolution);
-        List<Statistics> tabuStatistics = StatisticsUtils.analyzeMultipleIndividualLists(tabuSearchSolution);
-        XChartResultPresenter.instance("ga.png", CHART_WIDTH, CHART_HEIGHT).present(gaStatistics);
-        TabuXChartResultPresenter.instance("tabu.png", CHART_WIDTH, CHART_HEIGHT).present(tabuStatistics);
+//        List<Statistics> gaStatistics = StatisticsUtils.analyzeMultiplePopulationLists(geneticAlgorithmSolution);
+//        List<Statistics> tabuStatistics = StatisticsUtils.analyzeMultipleIndividualLists(tabuSearchSolution);
+        List<Statistics> saStatistics = StatisticsUtils.analyzeMultipleIndividualLists(simulatedAnnealingSolution);
+//        XChartResultPresenter.instance("ga.png", CHART_WIDTH, CHART_HEIGHT).present(gaStatistics);
+//        TabuXChartResultPresenter.instance("tabu.png", CHART_WIDTH, CHART_HEIGHT).present(tabuStatistics);
+        TsSaXChartResultPresenter.instance("sa.png", CHART_WIDTH, CHART_HEIGHT).present(saStatistics);
         ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
-        pw.println("GeneticAlgorithm statistics:");
-        consolePresenter.present(gaStatistics);
-        pw.println("TabuSearch statistics:");
-        consolePresenter.present(tabuStatistics);
+//        pw.println("GeneticAlgorithm statistics:");
+//        consolePresenter.present(gaStatistics);
+//        pw.println("TabuSearch statistics:");
+//        consolePresenter.present(tabuStatistics);
+        pw.println("SimulatedAnnealing statistics:");
+        consolePresenter.present(saStatistics);
     }
 
     @SuppressWarnings("all")

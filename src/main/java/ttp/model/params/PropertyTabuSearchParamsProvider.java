@@ -18,7 +18,7 @@ public class PropertyTabuSearchParamsProvider {
 
     public enum TabuSearchProperties {
 
-        ITERATIONS("iterations"), MULTIPLIER("multiplier"), TABU_DURATION("tabu_duration");
+        ITERATIONS("ts_iterations"), MULTIPLIER("multiplier"), TABU_DURATION("tabu_duration");
 
         @Getter
         private final String key;

@@ -59,7 +59,7 @@ public class TabuSearch implements Algorithm<Individual> {
                     continue;
                 }
                 int[] newBestSolution = Arrays.copyOf(bestSolution, bestSolution.length);
-                swap(i, j, newBestSolution);
+                ArrayUtils.swap(i, j, newBestSolution);
                 Result newBestResult = Individual.of(newBestSolution, problemInfo, knapsackSolver, fitnessFunction)
                         .getResult();
                 if ((newBestResult.getValue() > bestResult.getValue() || firstNeighbour)
@@ -77,13 +77,6 @@ public class TabuSearch implements Algorithm<Individual> {
             tabuList.tabuMove(node1, node2);
         }
         return bestSolution;
-    }
-
-    private int[] swap(int i, int j, int[] solution) {
-        int temp = solution[i];
-        solution[i] = solution[j];
-        solution[j] = temp;
-        return solution;
     }
 
     @EqualsAndHashCode
