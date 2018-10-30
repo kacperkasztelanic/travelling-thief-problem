@@ -2,6 +2,7 @@ package ttp.presenter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -33,6 +34,9 @@ public class TsSaXChartResultPresenter extends AbstractXChartResultPresenter {
     }
 
     private List<Double> prepareBestSoFar(List<Double> current) {
+        if(current.isEmpty()) {
+            return Collections.emptyList();
+        }
         List<Double> result = new ArrayList<>(current.size());
         double best = current.get(0);
         result.add(best);

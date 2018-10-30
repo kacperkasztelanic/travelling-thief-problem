@@ -176,7 +176,7 @@ public class App {
 //        List<Statistics> tabuStatistics = StatisticsUtils.analyzeMultipleIndividualLists(tabuSearchSolution);
         List<Statistics> saStatistics = StatisticsUtils.analyzeMultipleIndividualLists(simulatedAnnealingSolution);
 //        XChartResultPresenter.instance("ga.png", CHART_WIDTH, CHART_HEIGHT).present(gaStatistics);
-//        TabuXChartResultPresenter.instance("tabu.png", CHART_WIDTH, CHART_HEIGHT).present(tabuStatistics);
+//        TabuXChartResultPresenter.instance("ts.png", CHART_WIDTH, CHART_HEIGHT).present(tabuStatistics);
         TsSaXChartResultPresenter.instance("sa.png", CHART_WIDTH, CHART_HEIGHT).present(saStatistics);
         ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
 //        pw.println("GeneticAlgorithm statistics:");
