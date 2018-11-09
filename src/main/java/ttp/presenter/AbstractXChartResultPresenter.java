@@ -2,6 +2,7 @@ package ttp.presenter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.BitmapEncoder.BitmapFormat;
@@ -45,7 +46,8 @@ public abstract class AbstractXChartResultPresenter implements ResultPresenter {
         chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideSE);
         chart.getStyler().setAxisTitlesVisible(true);
         for (ChartSeries chartSeries : prepareSeriesCollection(statistics)) {
-            chart.addSeries(chartSeries.getLabel(), chartSeries.getXSeries(), chartSeries.getYSeries());
+            chart.addSeries(chartSeries.getLabel(), chartSeries.getXSeries(), chartSeries.getYSeries(),
+                    chartSeries.getErrors().orElse(null));
         }
         return chart;
     }
@@ -56,10 +58,19 @@ public abstract class AbstractXChartResultPresenter implements ResultPresenter {
 
     protected abstract List<ChartSeries> prepareSeriesCollection(List<Statistics> statistics);
 
-    @AllArgsConstructor(staticName = "of")
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @EqualsAndHashCode(of = { "label" })
     @ToString(includeFieldNames = false, of = { "label" })
     protected static class ChartSeries {
+
+        public static ChartSeries of(String label, List<? extends Number> xSeries, List<? extends Number> ySeries,
+                List<? extends Number> errors) {
+            return new ChartSeries(label, xSeries, ySeries, Optional.ofNullable(errors));
+        }
+
+        public static ChartSeries of(String label, List<? extends Number> xSeries, List<? extends Number> ySeries) {
+            return of(label, xSeries, ySeries, null);
+        }
 
         @Getter
         private final String label;
@@ -67,5 +78,7 @@ public abstract class AbstractXChartResultPresenter implements ResultPresenter {
         private final List<? extends Number> xSeries;
         @Getter
         private final List<? extends Number> ySeries;
+        @Getter
+        private final Optional<List<? extends Number>> errors;
     }
 }

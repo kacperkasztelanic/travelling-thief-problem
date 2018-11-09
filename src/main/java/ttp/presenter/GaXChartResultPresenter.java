@@ -31,7 +31,7 @@ public class GaXChartResultPresenter extends AbstractXChartResultPresenter {
         ChartSeries maxSeries = ChartSeries.of(MAX_SERIES_LABEL, xSeries,
                 prepareSeries(statistics, Statistics::getMaxValue));
         ChartSeries avgSeries = ChartSeries.of(AVG_SERIES_LABEL, xSeries,
-                prepareSeries(statistics, Statistics::getAvgValue));
+                prepareSeries(statistics, Statistics::getAvgValue), prepareSeries(statistics, Statistics::getStdDev));
         return Arrays.asList(minSeries, maxSeries, avgSeries);
     }
 
