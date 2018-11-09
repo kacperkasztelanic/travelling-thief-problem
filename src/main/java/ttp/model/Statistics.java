@@ -7,7 +7,7 @@ import lombok.ToString;
 
 @AllArgsConstructor(staticName = "of")
 @EqualsAndHashCode
-@ToString(includeFieldNames = false)
+@ToString(includeFieldNames = true)
 public class Statistics {
 
     @Getter
@@ -16,4 +16,6 @@ public class Statistics {
     private final double maxValue;
     @Getter
     private final double avgValue;
+    @Getter
+    private final double stdDev;
 }
