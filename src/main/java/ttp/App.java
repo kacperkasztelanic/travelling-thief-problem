@@ -45,9 +45,7 @@ import ttp.model.params.PropertyTabuSearchParamsProvider;
 import ttp.model.params.SimulatedAnnealingParams;
 import ttp.model.params.TabuSearchParams;
 import ttp.model.wrapper.ProblemInfo;
-import ttp.presenter.ConsoleResultPresenter;
 import ttp.presenter.GaXChartResultPresenter;
-import ttp.presenter.ResultPresenter;
 import ttp.presenter.TsSaXChartResultPresenter;
 import ttp.utils.StatisticsUtils;
 
@@ -171,11 +169,13 @@ public class App {
                 knapsackSolver);
         List<List<Population>> geneticAlgorithmSolution = Stream.generate(() -> geneticAlgorithm.solve(problemInfo))
                 .limit(runs).collect(Collectors.toList());
-        List<Statistics> gaStatistics = StatisticsUtils.analyzeMultiplePopulationLists(geneticAlgorithmSolution);
+        List<Statistics> gaStatistics = StatisticsUtils.analyzeMultiplePopulationListsEach(geneticAlgorithmSolution);
         GaXChartResultPresenter.instance("ga.png", CHART_WIDTH, CHART_HEIGHT).present(gaStatistics);
-        ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
+        // ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
         pw.println("GeneticAlgorithm statistics:");
-        consolePresenter.present(gaStatistics);
+        // consolePresenter.present(gaStatistics);
+        Statistics res = StatisticsUtils.analyzeMultiplePopulationLists(geneticAlgorithmSolution);
+        pw.println(res);
     }
 
     private void runTabuSearch(ProblemInfo problemInfo, TabuSearchParams tabuSearchParams,
@@ -183,11 +183,13 @@ public class App {
         Algorithm<Individual> tabuSearch = TabuSearch.instance(fitnessFunction, tabuSearchParams, knapsackSolver);
         List<List<Individual>> tabuSearchSolution = Stream.generate(() -> tabuSearch.solve(problemInfo))
                 .limit(runs * tabuSearchParams.getMultiplier()).collect(Collectors.toList());
-        List<Statistics> tabuStatistics = StatisticsUtils.analyzeMultipleIndividualLists(tabuSearchSolution);
+        List<Statistics> tabuStatistics = StatisticsUtils.analyzeMultipleIndividualListsEach(tabuSearchSolution);
         TsSaXChartResultPresenter.instance("ts.png", CHART_WIDTH, CHART_HEIGHT).present(tabuStatistics);
-        ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
+        // ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
         pw.println("TabuSearch statistics:");
-        consolePresenter.present(tabuStatistics);
+        // consolePresenter.present(tabuStatistics);
+        Statistics res = StatisticsUtils.analyzeMultipleIndividualLists(tabuSearchSolution);
+        pw.println(res);
     }
 
     private void runSimulatedAnnealing(ProblemInfo problemInfo, SimulatedAnnealingParams simulatedAnnealingParams,
@@ -196,11 +198,13 @@ public class App {
                 simulatedAnnealingParams, knapsackSolver);
         List<List<Individual>> simulatedAnnealingSolution = Stream.generate(() -> simulatedAnnealing.solve(problemInfo))
                 .limit(runs).collect(Collectors.toList());
-        List<Statistics> saStatistics = StatisticsUtils.analyzeMultipleIndividualLists(simulatedAnnealingSolution);
+        List<Statistics> saStatistics = StatisticsUtils.analyzeMultipleIndividualListsEach(simulatedAnnealingSolution);
         TsSaXChartResultPresenter.instance("sa.png", CHART_WIDTH, CHART_HEIGHT).present(saStatistics);
-        ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
+        // ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
         pw.println("SimulatedAnnealing statistics:");
-        consolePresenter.present(saStatistics);
+        // consolePresenter.present(saStatistics);
+        Statistics res = StatisticsUtils.analyzeMultipleIndividualLists(simulatedAnnealingSolution);
+        pw.println(res);
     }
 
     @SuppressWarnings("all")
