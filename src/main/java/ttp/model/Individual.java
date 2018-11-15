@@ -26,7 +26,8 @@ public class Individual {
     private final KnapsackSolver knapsackSolver;
     private final FitnessFunction fitnessFunction;
 
-    private Result result;
+    @Getter(lazy = true)
+    private final Result result = fitnessFunction.calculate(problemInfo, this);
 
     public static Individual of(int[] nodes, ProblemInfo problemInfo, KnapsackSolver knapsackSolver,
             FitnessFunction fitnessFunction) {
@@ -47,13 +48,6 @@ public class Individual {
         this.problemInfo = problemInfo;
         this.knapsackSolver = knapsackSolver;
         this.fitnessFunction = fitnessFunction;
-    }
-
-    public Result getResult() {
-        if (result == null) {
-            result = fitnessFunction.calculate(problemInfo, this);
-        }
-        return result;
     }
 
     public Individual mutate(double probability) {
