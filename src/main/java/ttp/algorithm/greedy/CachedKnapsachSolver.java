@@ -54,10 +54,7 @@ public class CachedKnapsachSolver implements KnapsackSolver {
             if (hashCode() != other.hashCode()) {
                 return false;
             }
-            if (!Arrays.equals(array, other.array)) {
-                return false;
-            }
-            return true;
+            return Arrays.equals(array, other.array);
         }
     }
 }

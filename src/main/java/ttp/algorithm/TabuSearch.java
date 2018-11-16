@@ -31,7 +31,7 @@ public class TabuSearch implements Algorithm<Individual> {
         Tabu tabuList = Tabu.of(problemInfo.getProblem().getDimension(), tabuSearchParams.getTabuDuration());
         List<Individual> solutions = new ArrayList<>();
         for (int i = 0; i < numberOfIterations; i++) {
-            currentSolution = getBestNeighbour(tabuList, currentSolution, problemInfo);
+            currentSolution = getBestNeighbour(tabuList, currentSolution);
             Individual current = individualFactory.newIndividual(currentSolution);
             solutions.add(current);
         }
@@ -44,7 +44,7 @@ public class TabuSearch implements Algorithm<Individual> {
                 .orElseThrow(IllegalStateException::new);
     }
 
-    private int[] getBestNeighbour(Tabu tabuList, int[] initSolution, ProblemInfo problemInfo) {
+    private int[] getBestNeighbour(Tabu tabuList, int[] initSolution) {
         int[] bestSolution = Arrays.copyOf(initSolution, initSolution.length);
         Result bestResult = individualFactory.newIndividual(bestSolution).getResult();
         int node1 = 0;

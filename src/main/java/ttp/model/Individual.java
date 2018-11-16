@@ -12,7 +12,7 @@ import ttp.algorithm.greedy.KnapsackSolver;
 import ttp.model.wrapper.ProblemInfo;
 
 @EqualsAndHashCode
-public class Individual implements Cloneable {
+public class Individual {
 
     private static final int DIVISION_POINT_RATIO = 2;
 
@@ -93,9 +93,8 @@ public class Individual implements Cloneable {
     public String toString() {
         return "Individual(nodes: " + Arrays.toString(nodes) + ", items: " + Arrays.toString(items) + ")";
     }
-    
-    @Override
-    public Individual clone() {
+
+    public Individual copy() {
         int[] newNodes = Arrays.copyOf(nodes, nodes.length);
         Item[] newItems = Arrays.copyOf(items, items.length);
         return new Individual(newNodes, newItems, problemInfo, knapsackSolver, fitnessFunction);

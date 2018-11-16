@@ -9,7 +9,7 @@ import ttp.algorithm.greedy.KnapsackSolver;
 import ttp.model.wrapper.ProblemInfo;
 
 @EqualsAndHashCode(callSuper = true)
-public class HybridIndividual extends Individual implements Cloneable {
+public class HybridIndividual extends Individual {
 
     private final ImproveStrategy improveStrategy;
 
@@ -34,7 +34,7 @@ public class HybridIndividual extends Individual implements Cloneable {
     }
 
     @Override
-    public HybridIndividual clone() {
+    public HybridIndividual copy() {
         int[] newNodes = Arrays.copyOf(nodes, nodes.length);
         Item[] newItems = Arrays.copyOf(items, items.length);
         return new HybridIndividual(newNodes, newItems, problemInfo, knapsackSolver, fitnessFunction, improveStrategy);

@@ -71,7 +71,7 @@ public class Population {
         Individual[] clones = new Individual[numberOfParentsToClone];
         Individual[] selected = select(numberOfParentsToClone);
         for (int i = 0; i < numberOfParentsToClone; i++) {
-            clones[i] = selected[i].clone();
+            clones[i] = selected[i].copy();
         }
         return clones;
     }

@@ -15,12 +15,12 @@ import ttp.model.wrapper.ProblemInfo;
 public class GeneticAlgorithm implements Algorithm<Population> {
 
     private final GeneticParams geneticParams;
-    private final IndividualFactory IndividualFactory;
+    private final IndividualFactory individualFactory;
 
     @Override
     public List<Population> solve(ProblemInfo problemInfo) {
         List<Population> generations = new ArrayList<>(geneticParams.getNumberOfGenerations());
-        Population first = Population.firstPopulation(geneticParams, problemInfo, IndividualFactory);
+        Population first = Population.firstPopulation(geneticParams, problemInfo, individualFactory);
         generations.add(first);
         for (int i = 1; i < geneticParams.getNumberOfGenerations(); i++) {
             generations.add(generations.get(i - 1).nextGeneration());
