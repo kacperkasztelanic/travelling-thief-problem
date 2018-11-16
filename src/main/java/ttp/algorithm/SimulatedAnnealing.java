@@ -6,35 +6,53 @@ import java.util.List;
 import java.util.Random;
 
 import lombok.RequiredArgsConstructor;
-import ttp.algorithm.fitness.FitnessFunction;
-import ttp.algorithm.greedy.KnapsackSolver;
 import ttp.model.Individual;
 import ttp.model.Node;
+import ttp.model.factory.IndividualFactory;
 import ttp.model.params.SimulatedAnnealingParams;
 import ttp.model.wrapper.ProblemInfo;
 import ttp.utils.ArrayUtils;
 
 @RequiredArgsConstructor(staticName = "instance")
-public class SimulatedAnnealing implements Algorithm<Individual> {
+public class SimulatedAnnealing implements Algorithm<Individual>, ImproveStrategy {
 
-    private final FitnessFunction fitnessFunction;
     private final SimulatedAnnealingParams simulatedAnnealingParams;
-    private final KnapsackSolver knapsackSolver;
+    private final IndividualFactory individualFactory;
     private final Random random = new Random();
 
     @Override
     public List<Individual> solve(ProblemInfo problemInfo) {
         int[] currentSolution = ArrayUtils
                 .shuffledCopy(problemInfo.getProblem().getNodes().stream().mapToInt(Node::getId).toArray());
+        return solveInternal(currentSolution);
+    }
+
+    @Override
+    public Individual solveForBest(ProblemInfo problemInfo) {
+        return findBest(solve(problemInfo));
+    }
+
+    @Override
+    public Individual tryToImprove(Individual individual) {
+        Individual bestFound = findBest(solveInternal(individual.getNodes()));
+        return bestFound.getResult().getValue() > individual.getResult().getValue() ? bestFound : individual;
+    }
+
+    private Individual findBest(List<Individual> individuals) {
+        return individuals.stream().max(Comparator.comparingDouble(i -> i.getResult().getValue()))
+                .orElseThrow(IllegalStateException::new);
+    }
+
+    private List<Individual> solveInternal(int[] currentSolution) {
         List<Individual> result = new ArrayList<>();
-        Individual best = Individual.of(currentSolution, problemInfo, knapsackSolver, fitnessFunction);
+        Individual best = individualFactory.newIndividual(currentSolution);
         double currentTemperature = simulatedAnnealingParams.getStartingTemperature();
         for (int i = 0; i < simulatedAnnealingParams.getIterations(); i++) {
             if (currentTemperature > simulatedAnnealingParams.getStopTemperature()) {
                 int r1 = random.nextInt(currentSolution.length);
                 int r2 = random.nextInt(currentSolution.length);
                 ArrayUtils.swap(r1, r2, currentSolution);
-                Individual current = Individual.of(currentSolution, problemInfo, knapsackSolver, fitnessFunction);
+                Individual current = individualFactory.newIndividual(currentSolution);
                 if (current.getResult().getValue() > best.getResult().getValue()) {
                     best = current;
                 } else if (Math
@@ -47,11 +65,5 @@ public class SimulatedAnnealing implements Algorithm<Individual> {
             }
         }
         return result;
-    }
-
-    @Override
-    public Individual solveForBest(ProblemInfo problemInfo) {
-        return solve(problemInfo).stream().max(Comparator.comparingDouble(i -> i.getResult().getValue()))
-                .orElseThrow(IllegalStateException::new);
     }
 }

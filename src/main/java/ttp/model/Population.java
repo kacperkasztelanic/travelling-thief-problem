@@ -5,8 +5,7 @@ import java.util.Random;
 
 import lombok.Getter;
 import lombok.ToString;
-import ttp.algorithm.fitness.FitnessFunction;
-import ttp.algorithm.greedy.KnapsackSolver;
+import ttp.model.factory.IndividualFactory;
 import ttp.model.params.GeneticParams;
 import ttp.model.wrapper.ProblemInfo;
 import ttp.utils.ArrayUtils;
@@ -20,33 +19,30 @@ public class Population {
     private final Individual[] members;
 
     private final GeneticParams geneticParams;
-    private final ProblemInfo problemInfo;
-    private final KnapsackSolver knapsackSolver;
-    private final FitnessFunction fittnessFunction;
 
-    public static Population of(Individual[] members, GeneticParams geneticParams, ProblemInfo problemInfo,
-            KnapsackSolver knapsackSolver, FitnessFunction fittnessFunction) {
-        return new Population(members, geneticParams, problemInfo, knapsackSolver, fittnessFunction);
+    public static Population firstPopulation(GeneticParams geneticParams, ProblemInfo problemInfo,
+            IndividualFactory individualFactory) {
+        return randomPopulation(geneticParams, problemInfo, individualFactory);
     }
 
-    private Population(Individual[] members, GeneticParams geneticParams, ProblemInfo problemInfo,
-            KnapsackSolver knapsackSolver, FitnessFunction fittnessFunction) {
-        this.members = members;
-        this.geneticParams = geneticParams;
-        this.problemInfo = problemInfo;
-        this.knapsackSolver = knapsackSolver;
-        this.fittnessFunction = fittnessFunction;
+    private static Population of(Individual[] members, GeneticParams geneticParams) {
+        return new Population(members, geneticParams);
     }
 
-    public static Population randomPopulation(GeneticParams geneticParams, ProblemInfo problemInfo,
-            KnapsackSolver knapsackSolver, FitnessFunction fittnessFunction) {
+    private static Population randomPopulation(GeneticParams geneticParams, ProblemInfo problemInfo,
+            IndividualFactory individualFactory) {
         int size = geneticParams.getPopulationSize();
         int[] nodes = problemInfo.getProblem().getNodes().stream().mapToInt(Node::getId).toArray();
         Individual[] members = new Individual[size];
         for (int i = 0; i < size; i++) {
-            members[i] = Individual.of(ArrayUtils.shuffledCopy(nodes), problemInfo, knapsackSolver, fittnessFunction);
+            members[i] = individualFactory.newIndividual(ArrayUtils.shuffledCopy(nodes));
         }
-        return Population.of(members, geneticParams, problemInfo, knapsackSolver, fittnessFunction);
+        return Population.of(members, geneticParams);
+    }
+
+    private Population(Individual[] members, GeneticParams geneticParams) {
+        this.members = members;
+        this.geneticParams = geneticParams;
     }
 
     public Population nextGeneration() {
@@ -56,8 +52,7 @@ public class Population {
         Individual[] newMembers = new Individual[geneticParams.getPopulationSize()];
         System.arraycopy(children, 0, newMembers, 0, children.length);
         System.arraycopy(clonedParents, 0, newMembers, children.length, clonedParents.length);
-        Population newPopulation = Population.of(newMembers, geneticParams, problemInfo, knapsackSolver,
-                fittnessFunction);
+        Population newPopulation = Population.of(newMembers, geneticParams);
         newPopulation.invokeMutations();
         return newPopulation;
     }
@@ -76,7 +71,7 @@ public class Population {
         Individual[] clones = new Individual[numberOfParentsToClone];
         Individual[] selected = select(numberOfParentsToClone);
         for (int i = 0; i < numberOfParentsToClone; i++) {
-            clones[i] = Individual.of(selected[i]);
+            clones[i] = selected[i].clone();
         }
         return clones;
     }

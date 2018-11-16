@@ -12,19 +12,19 @@ import ttp.algorithm.greedy.KnapsackSolver;
 import ttp.model.wrapper.ProblemInfo;
 
 @EqualsAndHashCode
-public class Individual {
+public class Individual implements Cloneable {
 
     private static final int DIVISION_POINT_RATIO = 2;
-    private static final Random random = new Random();
 
     @Getter
-    private final int[] nodes;
+    protected final int[] nodes;
     @Getter
-    private final Item[] items;
+    protected final Item[] items;
 
-    private final ProblemInfo problemInfo;
-    private final KnapsackSolver knapsackSolver;
-    private final FitnessFunction fitnessFunction;
+    protected final ProblemInfo problemInfo;
+    protected final KnapsackSolver knapsackSolver;
+    protected final FitnessFunction fitnessFunction;
+    protected final Random random = new Random();
 
     @Getter(lazy = true)
     private final Result result = fitnessFunction.calculate(problemInfo, this);
@@ -34,14 +34,7 @@ public class Individual {
         return new Individual(nodes, knapsackSolver.solve(nodes), problemInfo, knapsackSolver, fitnessFunction);
     }
 
-    public static Individual of(Individual individual) {
-        int[] newNodes = Arrays.copyOf(individual.getNodes(), individual.getNodes().length);
-        Item[] newItems = Arrays.copyOf(individual.getItems(), individual.getItems().length);
-        return new Individual(newNodes, newItems, individual.problemInfo, individual.knapsackSolver,
-                individual.fitnessFunction);
-    }
-
-    private Individual(int[] nodes, Item[] items, ProblemInfo problemInfo, KnapsackSolver knapsackSolver,
+    protected Individual(int[] nodes, Item[] items, ProblemInfo problemInfo, KnapsackSolver knapsackSolver,
             FitnessFunction fitnessFunction) {
         this.nodes = nodes;
         this.items = items;
@@ -99,5 +92,12 @@ public class Individual {
     @Override
     public String toString() {
         return "Individual(nodes: " + Arrays.toString(nodes) + ", items: " + Arrays.toString(items) + ")";
+    }
+    
+    @Override
+    public Individual clone() {
+        int[] newNodes = Arrays.copyOf(nodes, nodes.length);
+        Item[] newItems = Arrays.copyOf(items, items.length);
+        return new Individual(newNodes, newItems, problemInfo, knapsackSolver, fitnessFunction);
     }
 }

@@ -8,11 +8,10 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import ttp.algorithm.fitness.FitnessFunction;
-import ttp.algorithm.greedy.KnapsackSolver;
 import ttp.model.Individual;
 import ttp.model.Node;
 import ttp.model.Result;
+import ttp.model.factory.IndividualFactory;
 import ttp.model.params.TabuSearchParams;
 import ttp.model.wrapper.ProblemInfo;
 import ttp.utils.ArrayUtils;
@@ -20,9 +19,8 @@ import ttp.utils.ArrayUtils;
 @AllArgsConstructor(staticName = "instance")
 public class TabuSearch implements Algorithm<Individual> {
 
-    private final FitnessFunction fitnessFunction;
     private final TabuSearchParams tabuSearchParams;
-    private final KnapsackSolver knapsackSolver;
+    private final IndividualFactory individualFactory;
 
     @Override
     public List<Individual> solve(ProblemInfo problemInfo) {
@@ -34,7 +32,7 @@ public class TabuSearch implements Algorithm<Individual> {
         List<Individual> solutions = new ArrayList<>();
         for (int i = 0; i < numberOfIterations; i++) {
             currentSolution = getBestNeighbour(tabuList, currentSolution, problemInfo);
-            Individual current = Individual.of(currentSolution, problemInfo, knapsackSolver, fitnessFunction);
+            Individual current = individualFactory.newIndividual(currentSolution);
             solutions.add(current);
         }
         return solutions;
@@ -48,7 +46,7 @@ public class TabuSearch implements Algorithm<Individual> {
 
     private int[] getBestNeighbour(Tabu tabuList, int[] initSolution, ProblemInfo problemInfo) {
         int[] bestSolution = Arrays.copyOf(initSolution, initSolution.length);
-        Result bestResult = Individual.of(bestSolution, problemInfo, knapsackSolver, fitnessFunction).getResult();
+        Result bestResult = individualFactory.newIndividual(bestSolution).getResult();
         int node1 = 0;
         int node2 = 0;
         boolean firstNeighbour = true;
@@ -60,8 +58,7 @@ public class TabuSearch implements Algorithm<Individual> {
                 }
                 int[] newBestSolution = Arrays.copyOf(bestSolution, bestSolution.length);
                 ArrayUtils.swap(i, j, newBestSolution);
-                Result newBestResult = Individual.of(newBestSolution, problemInfo, knapsackSolver, fitnessFunction)
-                        .getResult();
+                Result newBestResult = individualFactory.newIndividual(newBestSolution).getResult();
                 if ((newBestResult.getValue() > bestResult.getValue() || firstNeighbour)
                         && tabuList.getTabuValue(i, j) == 0) {
                     firstNeighbour = false;

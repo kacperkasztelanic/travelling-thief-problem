@@ -22,6 +22,7 @@ import org.apache.commons.cli.ParseException;
 
 import ttp.algorithm.Algorithm;
 import ttp.algorithm.GeneticAlgorithm;
+import ttp.algorithm.ImproveStrategy;
 import ttp.algorithm.SimulatedAnnealing;
 import ttp.algorithm.TabuSearch;
 import ttp.algorithm.fitness.FitnessFunction;
@@ -38,6 +39,9 @@ import ttp.model.Individual;
 import ttp.model.Population;
 import ttp.model.Problem;
 import ttp.model.Statistics;
+import ttp.model.factory.HybridIndividualFactory;
+import ttp.model.factory.IndividualFactory;
+import ttp.model.factory.SimpleIndividualFactory;
 import ttp.model.params.GeneticParams;
 import ttp.model.params.PropertyGeneticParamsProvider;
 import ttp.model.params.PropertySimulatedAnnealingParamsProvider;
@@ -49,6 +53,7 @@ import ttp.presenter.GaXChartResultPresenter;
 import ttp.presenter.TsSaXChartResultPresenter;
 import ttp.utils.StatisticsUtils;
 
+@SuppressWarnings("unused")
 public class App {
 
     private static final String OPTION_HELP_SHORT = "h";
@@ -130,8 +135,9 @@ public class App {
 
     private void runGeneticAlgorithm(ProblemInfo problemInfo, GeneticParams geneticParams,
             FitnessFunction fitnessFunction, KnapsackSolver knapsackSolver, int runs) {
-        Algorithm<Population> geneticAlgorithm = GeneticAlgorithm.instance(fitnessFunction, geneticParams,
-                knapsackSolver);
+        IndividualFactory individualFactory = SimpleIndividualFactory.instance(problemInfo, knapsackSolver,
+                fitnessFunction);
+        Algorithm<Population> geneticAlgorithm = GeneticAlgorithm.instance(geneticParams, individualFactory);
         List<List<Population>> geneticAlgorithmSolution = Stream.generate(() -> geneticAlgorithm.solve(problemInfo))
                 .limit(runs).collect(Collectors.toList());
         List<Statistics> gaStatistics = StatisticsUtils.analyzeMultiplePopulationListsEach(geneticAlgorithmSolution);
@@ -145,7 +151,9 @@ public class App {
 
     private void runTabuSearch(ProblemInfo problemInfo, TabuSearchParams tabuSearchParams,
             FitnessFunction fitnessFunction, KnapsackSolver knapsackSolver, int runs) {
-        Algorithm<Individual> tabuSearch = TabuSearch.instance(fitnessFunction, tabuSearchParams, knapsackSolver);
+        IndividualFactory individualFactory = SimpleIndividualFactory.instance(problemInfo, knapsackSolver,
+                fitnessFunction);
+        Algorithm<Individual> tabuSearch = TabuSearch.instance(tabuSearchParams, individualFactory);
         List<List<Individual>> tabuSearchSolution = Stream.generate(() -> tabuSearch.solve(problemInfo)).limit(runs)
                 .collect(Collectors.toList());
         List<Statistics> tabuStatistics = StatisticsUtils.analyzeMultipleIndividualListsEach(tabuSearchSolution);
@@ -159,8 +167,10 @@ public class App {
 
     private void runSimulatedAnnealing(ProblemInfo problemInfo, SimulatedAnnealingParams simulatedAnnealingParams,
             FitnessFunction fitnessFunction, KnapsackSolver knapsackSolver, int runs) {
-        Algorithm<Individual> simulatedAnnealing = SimulatedAnnealing.instance(fitnessFunction,
-                simulatedAnnealingParams, knapsackSolver);
+        IndividualFactory individualFactory = SimpleIndividualFactory.instance(problemInfo, knapsackSolver,
+                fitnessFunction);
+        Algorithm<Individual> simulatedAnnealing = SimulatedAnnealing.instance(simulatedAnnealingParams,
+                individualFactory);
         List<List<Individual>> simulatedAnnealingSolution = Stream.generate(() -> simulatedAnnealing.solve(problemInfo))
                 .limit(runs).collect(Collectors.toList());
         List<Statistics> saStatistics = StatisticsUtils.analyzeMultipleIndividualListsEach(simulatedAnnealingSolution);
@@ -169,6 +179,25 @@ public class App {
         pw.println("SimulatedAnnealing statistics:");
         // consolePresenter.present(saStatistics);
         Statistics res = StatisticsUtils.analyzeMultipleIndividualLists(simulatedAnnealingSolution);
+        pw.println(res);
+    }
+
+    private void runHybrid(ProblemInfo problemInfo, GeneticParams geneticParams,
+            SimulatedAnnealingParams simulatedAnnealingParams, FitnessFunction fitnessFunction,
+            KnapsackSolver knapsackSolver, int runs) {
+        HybridIndividualFactory individualFactory = HybridIndividualFactory.instance(problemInfo, knapsackSolver,
+                fitnessFunction);
+        ImproveStrategy improveStrategy = SimulatedAnnealing.instance(simulatedAnnealingParams, individualFactory);
+        individualFactory.setImproveStrategy(improveStrategy);
+        Algorithm<Population> geneticAlgorithm = GeneticAlgorithm.instance(geneticParams, individualFactory);
+        List<List<Population>> geneticAlgorithmSolution = Stream.generate(() -> geneticAlgorithm.solve(problemInfo))
+                .limit(runs).collect(Collectors.toList());
+        List<Statistics> gaStatistics = StatisticsUtils.analyzeMultiplePopulationListsEach(geneticAlgorithmSolution);
+        GaXChartResultPresenter.instance("ga.png", CHART_WIDTH, CHART_HEIGHT).present(gaStatistics);
+        // ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
+        pw.println("GeneticAlgorithm statistics:");
+        // consolePresenter.present(gaStatistics);
+        Statistics res = StatisticsUtils.analyzeMultiplePopulationLists(geneticAlgorithmSolution);
         pw.println(res);
     }
 
@@ -201,9 +230,13 @@ public class App {
         FitnessFunction fitnessFunction = TtpFitnessFunction.instance();
         KnapsackSolver knapsackSolver = CachedKnapsachSolver.instance(SimpleGreedyKnapsackSolver.instance(problemInfo));
 
-        runGeneticAlgorithm(problemInfo, geneticParams, fitnessFunction, knapsackSolver, runs);
-        runTabuSearch(problemInfo, tabuSearchParams, fitnessFunction, knapsackSolver, runs);
-        runSimulatedAnnealing(problemInfo, simulatedAnnealingParams, fitnessFunction, knapsackSolver, runs);
+        // runGeneticAlgorithm(problemInfo, geneticParams, fitnessFunction,
+        // knapsackSolver, runs);
+        // runTabuSearch(problemInfo, tabuSearchParams, fitnessFunction, knapsackSolver,
+        // runs);
+        // runSimulatedAnnealing(problemInfo, simulatedAnnealingParams, fitnessFunction,
+        // knapsackSolver, runs);
+        runHybrid(problemInfo, geneticParams, simulatedAnnealingParams, fitnessFunction, knapsackSolver, runs);
     }
 
     @SuppressWarnings("all")
