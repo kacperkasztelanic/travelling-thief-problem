@@ -128,6 +128,50 @@ public class App {
         runInternal(line);
     }
 
+    private void runGeneticAlgorithm(ProblemInfo problemInfo, GeneticParams geneticParams,
+            FitnessFunction fitnessFunction, KnapsackSolver knapsackSolver, int runs) {
+        Algorithm<Population> geneticAlgorithm = GeneticAlgorithm.instance(fitnessFunction, geneticParams,
+                knapsackSolver);
+        List<List<Population>> geneticAlgorithmSolution = Stream.generate(() -> geneticAlgorithm.solve(problemInfo))
+                .limit(runs).collect(Collectors.toList());
+        List<Statistics> gaStatistics = StatisticsUtils.analyzeMultiplePopulationListsEach(geneticAlgorithmSolution);
+        GaXChartResultPresenter.instance("ga.png", CHART_WIDTH, CHART_HEIGHT).present(gaStatistics);
+        // ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
+        pw.println("GeneticAlgorithm statistics:");
+        // consolePresenter.present(gaStatistics);
+        Statistics res = StatisticsUtils.analyzeMultiplePopulationLists(geneticAlgorithmSolution);
+        pw.println(res);
+    }
+
+    private void runTabuSearch(ProblemInfo problemInfo, TabuSearchParams tabuSearchParams,
+            FitnessFunction fitnessFunction, KnapsackSolver knapsackSolver, int runs) {
+        Algorithm<Individual> tabuSearch = TabuSearch.instance(fitnessFunction, tabuSearchParams, knapsackSolver);
+        List<List<Individual>> tabuSearchSolution = Stream.generate(() -> tabuSearch.solve(problemInfo)).limit(runs)
+                .collect(Collectors.toList());
+        List<Statistics> tabuStatistics = StatisticsUtils.analyzeMultipleIndividualListsEach(tabuSearchSolution);
+        TsSaXChartResultPresenter.instance("ts.png", CHART_WIDTH, CHART_HEIGHT).present(tabuStatistics);
+        // ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
+        pw.println("TabuSearch statistics:");
+        // consolePresenter.present(tabuStatistics);
+        Statistics res = StatisticsUtils.analyzeMultipleIndividualLists(tabuSearchSolution);
+        pw.println(res);
+    }
+
+    private void runSimulatedAnnealing(ProblemInfo problemInfo, SimulatedAnnealingParams simulatedAnnealingParams,
+            FitnessFunction fitnessFunction, KnapsackSolver knapsackSolver, int runs) {
+        Algorithm<Individual> simulatedAnnealing = SimulatedAnnealing.instance(fitnessFunction,
+                simulatedAnnealingParams, knapsackSolver);
+        List<List<Individual>> simulatedAnnealingSolution = Stream.generate(() -> simulatedAnnealing.solve(problemInfo))
+                .limit(runs).collect(Collectors.toList());
+        List<Statistics> saStatistics = StatisticsUtils.analyzeMultipleIndividualListsEach(simulatedAnnealingSolution);
+        TsSaXChartResultPresenter.instance("sa.png", CHART_WIDTH, CHART_HEIGHT).present(saStatistics);
+        // ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
+        pw.println("SimulatedAnnealing statistics:");
+        // consolePresenter.present(saStatistics);
+        Statistics res = StatisticsUtils.analyzeMultipleIndividualLists(simulatedAnnealingSolution);
+        pw.println(res);
+    }
+
     public void runInternal(CommandLine line) {
         int runs = Integer.parseInt(line.getOptionValue(OPTION_NUMBER_SHORT));
         String resource = BASE_CASES_DIRECTORY + "/" + line.getOptionValue(OPTION_PROBLEM_SHORT);
@@ -160,51 +204,6 @@ public class App {
         runGeneticAlgorithm(problemInfo, geneticParams, fitnessFunction, knapsackSolver, runs);
         runTabuSearch(problemInfo, tabuSearchParams, fitnessFunction, knapsackSolver, runs);
         runSimulatedAnnealing(problemInfo, simulatedAnnealingParams, fitnessFunction, knapsackSolver, runs);
-
-    }
-
-    private void runGeneticAlgorithm(ProblemInfo problemInfo, GeneticParams geneticParams,
-            FitnessFunction fitnessFunction, KnapsackSolver knapsackSolver, int runs) {
-        Algorithm<Population> geneticAlgorithm = GeneticAlgorithm.instance(fitnessFunction, geneticParams,
-                knapsackSolver);
-        List<List<Population>> geneticAlgorithmSolution = Stream.generate(() -> geneticAlgorithm.solve(problemInfo))
-                .limit(runs).collect(Collectors.toList());
-        List<Statistics> gaStatistics = StatisticsUtils.analyzeMultiplePopulationListsEach(geneticAlgorithmSolution);
-        GaXChartResultPresenter.instance("ga.png", CHART_WIDTH, CHART_HEIGHT).present(gaStatistics);
-        // ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
-        pw.println("GeneticAlgorithm statistics:");
-        // consolePresenter.present(gaStatistics);
-        Statistics res = StatisticsUtils.analyzeMultiplePopulationLists(geneticAlgorithmSolution);
-        pw.println(res);
-    }
-
-    private void runTabuSearch(ProblemInfo problemInfo, TabuSearchParams tabuSearchParams,
-            FitnessFunction fitnessFunction, KnapsackSolver knapsackSolver, int runs) {
-        Algorithm<Individual> tabuSearch = TabuSearch.instance(fitnessFunction, tabuSearchParams, knapsackSolver);
-        List<List<Individual>> tabuSearchSolution = Stream.generate(() -> tabuSearch.solve(problemInfo))
-                .limit(runs * tabuSearchParams.getMultiplier()).collect(Collectors.toList());
-        List<Statistics> tabuStatistics = StatisticsUtils.analyzeMultipleIndividualListsEach(tabuSearchSolution);
-        TsSaXChartResultPresenter.instance("ts.png", CHART_WIDTH, CHART_HEIGHT).present(tabuStatistics);
-        // ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
-        pw.println("TabuSearch statistics:");
-        // consolePresenter.present(tabuStatistics);
-        Statistics res = StatisticsUtils.analyzeMultipleIndividualLists(tabuSearchSolution);
-        pw.println(res);
-    }
-
-    private void runSimulatedAnnealing(ProblemInfo problemInfo, SimulatedAnnealingParams simulatedAnnealingParams,
-            FitnessFunction fitnessFunction, KnapsackSolver knapsackSolver, int runs) {
-        Algorithm<Individual> simulatedAnnealing = SimulatedAnnealing.instance(fitnessFunction,
-                simulatedAnnealingParams, knapsackSolver);
-        List<List<Individual>> simulatedAnnealingSolution = Stream.generate(() -> simulatedAnnealing.solve(problemInfo))
-                .limit(runs).collect(Collectors.toList());
-        List<Statistics> saStatistics = StatisticsUtils.analyzeMultipleIndividualListsEach(simulatedAnnealingSolution);
-        TsSaXChartResultPresenter.instance("sa.png", CHART_WIDTH, CHART_HEIGHT).present(saStatistics);
-        // ResultPresenter consolePresenter = ConsoleResultPresenter.instance(pw);
-        pw.println("SimulatedAnnealing statistics:");
-        // consolePresenter.present(saStatistics);
-        Statistics res = StatisticsUtils.analyzeMultipleIndividualLists(simulatedAnnealingSolution);
-        pw.println(res);
     }
 
     @SuppressWarnings("all")
