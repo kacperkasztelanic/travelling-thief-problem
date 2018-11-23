@@ -8,7 +8,6 @@ import lombok.ToString;
 import ttp.model.factory.IndividualFactory;
 import ttp.model.params.GeneticParams;
 import ttp.model.wrapper.ProblemInfo;
-import ttp.utils.ArrayUtils;
 
 @ToString(includeFieldNames = false, of = { "members" })
 public class Population {
@@ -35,7 +34,7 @@ public class Population {
         int[] nodes = problemInfo.getProblem().getNodes().stream().mapToInt(Node::getId).toArray();
         Individual[] members = new Individual[size];
         for (int i = 0; i < size; i++) {
-            members[i] = individualFactory.newIndividual(ArrayUtils.shuffledCopy(nodes));
+            members[i] = individualFactory.randomIndividual(nodes);
         }
         return Population.of(members, geneticParams);
     }

@@ -5,4 +5,6 @@ import ttp.model.Individual;
 public interface IndividualFactory {
 
     Individual newIndividual(int[] nodes);
+    
+    Individual randomIndividual(int[] nodes);
 }

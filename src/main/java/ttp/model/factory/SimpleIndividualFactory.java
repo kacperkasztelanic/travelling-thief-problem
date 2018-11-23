@@ -4,6 +4,7 @@ import ttp.algorithm.fitness.FitnessFunction;
 import ttp.algorithm.greedy.KnapsackSolver;
 import ttp.model.Individual;
 import ttp.model.wrapper.ProblemInfo;
+import ttp.utils.ArrayUtils;
 
 public class SimpleIndividualFactory implements IndividualFactory {
 
@@ -26,5 +27,10 @@ public class SimpleIndividualFactory implements IndividualFactory {
     @Override
     public Individual newIndividual(int[] nodes) {
         return Individual.of(nodes, problemInfo, knapsackSolver, fitnessFunction);
+    }
+
+    @Override
+    public Individual randomIndividual(int[] nodes) {
+        return newIndividual(ArrayUtils.shuffledCopy(nodes));
     }
 }

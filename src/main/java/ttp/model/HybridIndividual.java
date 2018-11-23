@@ -27,10 +27,11 @@ public class HybridIndividual extends Individual {
 
     @Override
     public Individual mutate(double probability) {
+        Individual mutated = super.mutate(probability);
         if (random.nextDouble() < probability * 30) {
-            return improveStrategy.tryToImprove(this);
+            return improveStrategy.tryToImprove(mutated);
         }
-        return super.mutate(probability);
+        return mutated;
     }
 
     @Override

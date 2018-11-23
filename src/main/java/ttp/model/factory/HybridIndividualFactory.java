@@ -5,7 +5,9 @@ import ttp.algorithm.ImproveStrategy;
 import ttp.algorithm.fitness.FitnessFunction;
 import ttp.algorithm.greedy.KnapsackSolver;
 import ttp.model.HybridIndividual;
+import ttp.model.Individual;
 import ttp.model.wrapper.ProblemInfo;
+import ttp.utils.ArrayUtils;
 
 public class HybridIndividualFactory extends SimpleIndividualFactory {
 
@@ -25,5 +27,10 @@ public class HybridIndividualFactory extends SimpleIndividualFactory {
     @Override
     public HybridIndividual newIndividual(int[] nodes) {
         return HybridIndividual.of(nodes, problemInfo, knapsackSolver, fitnessFunction, improveStrategy);
+    }
+
+    @Override
+    public Individual randomIndividual(int[] nodes) {
+        return improveStrategy.tryToImprove(newIndividual(ArrayUtils.shuffledCopy(nodes)));
     }
 }
