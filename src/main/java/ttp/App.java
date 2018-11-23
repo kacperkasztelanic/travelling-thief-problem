@@ -25,6 +25,7 @@ import ttp.algorithm.GeneticAlgorithm;
 import ttp.algorithm.ImproveStrategy;
 import ttp.algorithm.SimulatedAnnealing;
 import ttp.algorithm.TabuSearch;
+import ttp.algorithm.fitness.CachedFitnessFunction;
 import ttp.algorithm.fitness.FitnessFunction;
 import ttp.algorithm.fitness.TtpFitnessFunction;
 import ttp.algorithm.greedy.CachedKnapsachSolver;
@@ -227,7 +228,7 @@ public class App {
         pw.println(simulatedAnnealingParams);
 
         ProblemInfo problemInfo = ProblemInfo.of(problem);
-        FitnessFunction fitnessFunction = TtpFitnessFunction.instance();
+        FitnessFunction fitnessFunction = CachedFitnessFunction.instance(TtpFitnessFunction.instance(problemInfo));
         KnapsackSolver knapsackSolver = CachedKnapsachSolver.instance(SimpleGreedyKnapsackSolver.instance(problemInfo));
 
         // runGeneticAlgorithm(problemInfo, geneticParams, fitnessFunction,
