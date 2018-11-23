@@ -14,12 +14,10 @@ import ttp.model.wrapper.ProblemInfo;
 @ToString(includeFieldNames = false, of = { "members" })
 public class Population {
 
-    private static final Random random = new Random();
-
     @Getter
     private final Individual[] members;
-
     private final GeneticParams geneticParams;
+    private final Random random = new Random();
 
     public static Population firstPopulation(GeneticParams geneticParams, ProblemInfo problemInfo,
             IndividualFactory individualFactory) {
