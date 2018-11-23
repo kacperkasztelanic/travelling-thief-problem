@@ -1,6 +1,8 @@
 package ttp.algorithm.fitness;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import ttp.model.Individual;
 import ttp.model.Node;
 import ttp.model.Problem;
@@ -8,10 +10,14 @@ import ttp.model.Result;
 import ttp.model.wrapper.ProblemInfo;
 
 @AllArgsConstructor(staticName = "instance")
+@EqualsAndHashCode
+@ToString
 public class TspFitnessFunction implements FitnessFunction {
+    
+    private final ProblemInfo problemInfo;
 
     @Override
-    public Result calculate(ProblemInfo problemInfo, Individual individual) {
+    public Result calculate(Individual individual) {
         Problem problem = problemInfo.getProblem();
         int profit = 0;
         int weight = 0;

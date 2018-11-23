@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import ttp.model.Individual;
 import ttp.model.Population;
 import ttp.model.factory.IndividualFactory;
@@ -12,6 +14,8 @@ import ttp.model.params.GeneticParams;
 import ttp.model.wrapper.ProblemInfo;
 
 @AllArgsConstructor(staticName = "instance")
+@EqualsAndHashCode(of = { "geneticParams" })
+@ToString(of = { "geneticParams" })
 public class GeneticAlgorithm implements Algorithm<Population> {
 
     private final GeneticParams geneticParams;

@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import ttp.loader.exception.LoadException;
 import ttp.model.Item;
 import ttp.model.Node;
@@ -23,6 +24,7 @@ import ttp.model.Problem;
 import ttp.model.Problem.ProblemBuilder;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
+@ToString
 public class LoaderImpl implements Loader {
 
     private static final String DEFAULT_NUMERIC = "-1";

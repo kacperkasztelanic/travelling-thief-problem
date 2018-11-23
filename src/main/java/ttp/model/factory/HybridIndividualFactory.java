@@ -1,6 +1,8 @@
 package ttp.model.factory;
 
+import lombok.EqualsAndHashCode;
 import lombok.Setter;
+import lombok.ToString;
 import ttp.algorithm.ImproveStrategy;
 import ttp.algorithm.fitness.FitnessFunction;
 import ttp.algorithm.greedy.KnapsackSolver;
@@ -9,6 +11,8 @@ import ttp.model.Individual;
 import ttp.model.wrapper.ProblemInfo;
 import ttp.utils.ArrayUtils;
 
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class HybridIndividualFactory extends SimpleIndividualFactory {
 
     @Setter

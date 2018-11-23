@@ -11,7 +11,7 @@ import ttp.algorithm.fitness.FitnessFunction;
 import ttp.algorithm.greedy.KnapsackSolver;
 import ttp.model.wrapper.ProblemInfo;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(of = { "nodes", "items" })
 public class Individual {
 
     private static final int DIVISION_POINT_RATIO = 2;
@@ -27,7 +27,7 @@ public class Individual {
     protected final Random random = new Random();
 
     @Getter(lazy = true)
-    private final Result result = fitnessFunction.calculate(problemInfo, this);
+    private final Result result = fitnessFunction.calculate(this);
 
     public static Individual of(int[] nodes, ProblemInfo problemInfo, KnapsackSolver knapsackSolver,
             FitnessFunction fitnessFunction) {

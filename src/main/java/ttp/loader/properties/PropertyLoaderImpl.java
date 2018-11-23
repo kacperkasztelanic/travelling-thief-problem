@@ -6,9 +6,13 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import ttp.loader.exception.LoadException;
 
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class PropertyLoaderImpl implements PropertyLoader {
 
     private final String defaultPropertiesResource;

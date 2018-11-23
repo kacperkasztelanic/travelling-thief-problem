@@ -5,7 +5,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import ttp.model.Individual;
 import ttp.model.Node;
 import ttp.model.factory.IndividualFactory;
@@ -14,6 +16,8 @@ import ttp.model.wrapper.ProblemInfo;
 import ttp.utils.ArrayUtils;
 
 @RequiredArgsConstructor(staticName = "instance")
+@EqualsAndHashCode(of = { "simulatedAnnealingParams" })
+@ToString(of = { "simulatedAnnealingParams" })
 public class SimulatedAnnealing implements Algorithm<Individual>, ImproveStrategy {
 
     private final SimulatedAnnealingParams simulatedAnnealingParams;

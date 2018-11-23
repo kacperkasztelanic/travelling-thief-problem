@@ -6,8 +6,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import ttp.model.Statistics;
 
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class GaXChartResultPresenter extends AbstractXChartResultPresenter {
 
     private static final String X_LABEL = "Generation";

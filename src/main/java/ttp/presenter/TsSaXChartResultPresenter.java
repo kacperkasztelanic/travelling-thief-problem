@@ -7,8 +7,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import ttp.model.Statistics;
 
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class TsSaXChartResultPresenter extends AbstractXChartResultPresenter {
 
     private static final String X_LABEL = "Iteration";
@@ -34,7 +38,7 @@ public class TsSaXChartResultPresenter extends AbstractXChartResultPresenter {
     }
 
     private List<Double> prepareBestSoFar(List<Double> current) {
-        if(current.isEmpty()) {
+        if (current.isEmpty()) {
             return Collections.emptyList();
         }
         List<Double> result = new ArrayList<>(current.size());

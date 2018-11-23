@@ -5,9 +5,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import ttp.model.Statistics;
 
 @AllArgsConstructor(staticName = "instance")
+@EqualsAndHashCode
+@ToString
 public class ConsoleResultPresenter implements ResultPresenter {
 
     private final PrintWriter pw;

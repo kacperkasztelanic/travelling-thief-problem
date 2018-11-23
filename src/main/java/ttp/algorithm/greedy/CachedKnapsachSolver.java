@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import ttp.model.Item;
 
+@EqualsAndHashCode(of = { "knapsackSolver" })
+@ToString(of = { "knapsackSolver" })
 public class CachedKnapsachSolver implements KnapsackSolver {
 
     private final KnapsackSolver knapsackSolver;

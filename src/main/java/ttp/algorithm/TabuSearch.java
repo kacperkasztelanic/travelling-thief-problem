@@ -17,6 +17,8 @@ import ttp.model.wrapper.ProblemInfo;
 import ttp.utils.ArrayUtils;
 
 @AllArgsConstructor(staticName = "instance")
+@EqualsAndHashCode(of = { "tabuSearchParams" })
+@ToString(of = { "tabuSearchParams" })
 public class TabuSearch implements Algorithm<Individual> {
 
     private final TabuSearchParams tabuSearchParams;

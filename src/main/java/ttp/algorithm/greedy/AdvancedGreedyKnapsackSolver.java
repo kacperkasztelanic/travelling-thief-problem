@@ -14,6 +14,8 @@ import ttp.model.Problem;
 import ttp.model.wrapper.ProblemInfo;
 
 @AllArgsConstructor(staticName = "instance")
+@EqualsAndHashCode
+@ToString
 public class AdvancedGreedyKnapsackSolver implements KnapsackSolver {
 
     private final ProblemInfo problemInfo;
@@ -81,7 +83,7 @@ public class AdvancedGreedyKnapsackSolver implements KnapsackSolver {
     @EqualsAndHashCode(of = { "nodesWithDistanceFromStart" })
     @ToString()
     private static class RouteDistanceInfo {
-        
+
         @Getter
         private final double entireDistance;
         @Getter
@@ -92,7 +94,7 @@ public class AdvancedGreedyKnapsackSolver implements KnapsackSolver {
     @EqualsAndHashCode(of = { "node" })
     @ToString()
     private static class NodeWithDistanceFromStart {
-        
+
         @Getter
         private final Node node;
         @Getter
@@ -103,7 +105,7 @@ public class AdvancedGreedyKnapsackSolver implements KnapsackSolver {
     @EqualsAndHashCode(of = { "item" })
     @ToString()
     private static class ItemWithValue {
-        
+
         @Getter
         private final Item item;
         @Getter

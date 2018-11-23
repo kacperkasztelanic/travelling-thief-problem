@@ -3,12 +3,14 @@ package ttp.model;
 import java.util.Comparator;
 import java.util.Random;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import ttp.model.factory.IndividualFactory;
 import ttp.model.params.GeneticParams;
 import ttp.model.wrapper.ProblemInfo;
 
+@EqualsAndHashCode
 @ToString(includeFieldNames = false, of = { "members" })
 public class Population {
 

@@ -18,6 +18,8 @@ import lombok.ToString;
 import ttp.model.Statistics;
 
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode
+@ToString
 public abstract class AbstractXChartResultPresenter implements ResultPresenter {
 
     protected static final String TITLE = "Traveling Thief Problem";

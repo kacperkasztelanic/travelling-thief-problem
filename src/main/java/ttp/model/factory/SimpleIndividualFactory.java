@@ -1,11 +1,15 @@
 package ttp.model.factory;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import ttp.algorithm.fitness.FitnessFunction;
 import ttp.algorithm.greedy.KnapsackSolver;
 import ttp.model.Individual;
 import ttp.model.wrapper.ProblemInfo;
 import ttp.utils.ArrayUtils;
 
+@EqualsAndHashCode
+@ToString
 public class SimpleIndividualFactory implements IndividualFactory {
 
     protected final ProblemInfo problemInfo;

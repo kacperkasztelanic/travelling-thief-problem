@@ -3,9 +3,13 @@ package ttp.algorithm.greedy;
 import java.util.Comparator;
 import java.util.function.Function;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import ttp.model.Item;
 import ttp.model.wrapper.ProblemInfo;
 
+@EqualsAndHashCode
+@ToString(of = { "problemInfo" })
 public class SimpleGreedyKnapsackSolver implements KnapsackSolver {
 
     private final ProblemInfo problemInfo;
