@@ -8,10 +8,11 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ArrayUtils {
 
+    private static final Random RANDOM = new Random();
+
     public static void shuffle(int[] array) {
-        Random random = new Random();
         for (int i = array.length - 1; i > 0; i--) {
-            int index = random.nextInt(i + 1);
+            int index = RANDOM.nextInt(i + 1);
             if (index != i) {
                 int temp = array[index];
                 array[index] = array[i];
