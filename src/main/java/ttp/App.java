@@ -230,6 +230,7 @@ public class App {
         pw.println(geneticParams);
         pw.println(tabuSearchParams);
         pw.println(simulatedAnnealingParams);
+        pw.println(hybridParams);
 
         ProblemInfo problemInfo = ProblemInfo.of(problem);
         FitnessFunction fitnessFunction = CachedFitnessFunction.instance(TtpFitnessFunction.instance(problemInfo));
