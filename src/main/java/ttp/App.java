@@ -44,7 +44,9 @@ import ttp.model.factory.HybridIndividualFactory;
 import ttp.model.factory.IndividualFactory;
 import ttp.model.factory.SimpleIndividualFactory;
 import ttp.model.params.GeneticParams;
+import ttp.model.params.HybridParams;
 import ttp.model.params.PropertyGeneticParamsProvider;
+import ttp.model.params.PropertyHybridParamsProvider;
 import ttp.model.params.PropertySimulatedAnnealingParamsProvider;
 import ttp.model.params.PropertyTabuSearchParamsProvider;
 import ttp.model.params.SimulatedAnnealingParams;
@@ -185,9 +187,9 @@ public class App {
 
     private void runHybrid(ProblemInfo problemInfo, GeneticParams geneticParams,
             SimulatedAnnealingParams simulatedAnnealingParams, FitnessFunction fitnessFunction,
-            KnapsackSolver knapsackSolver, int runs) {
+            KnapsackSolver knapsackSolver, int runs, HybridParams hybridParams) {
         HybridIndividualFactory individualFactory = HybridIndividualFactory.instance(problemInfo, knapsackSolver,
-                fitnessFunction);
+                fitnessFunction, hybridParams);
         ImproveStrategy improveStrategy = SimulatedAnnealing.instance(simulatedAnnealingParams, individualFactory);
         individualFactory.setImproveStrategy(improveStrategy);
         Algorithm<Population> geneticAlgorithm = GeneticAlgorithm.instance(geneticParams, individualFactory);
@@ -210,6 +212,7 @@ public class App {
         GeneticParams geneticParams = null;
         TabuSearchParams tabuSearchParams = null;
         SimulatedAnnealingParams simulatedAnnealingParams = null;
+        HybridParams hybridParams = null;
         Loader loader = LoaderFactory.getInstance();
         Problem problem = null;
         try {
@@ -218,6 +221,7 @@ public class App {
             geneticParams = PropertyGeneticParamsProvider.forProperties(properties);
             tabuSearchParams = PropertyTabuSearchParamsProvider.forProperties(properties);
             simulatedAnnealingParams = PropertySimulatedAnnealingParamsProvider.forProperties(properties);
+            hybridParams = PropertyHybridParamsProvider.forProperties(properties);
         } catch (LoadException e) {
             e.printStackTrace(epw);
             return;
@@ -237,7 +241,8 @@ public class App {
         // runs);
         // runSimulatedAnnealing(problemInfo, simulatedAnnealingParams, fitnessFunction,
         // knapsackSolver, runs);
-        runHybrid(problemInfo, geneticParams, simulatedAnnealingParams, fitnessFunction, knapsackSolver, runs);
+        runHybrid(problemInfo, geneticParams, simulatedAnnealingParams, fitnessFunction, knapsackSolver, runs,
+                hybridParams);
     }
 
     @SuppressWarnings("all")
