@@ -13,7 +13,7 @@ import ttp.model.wrapper.ProblemInfo;
 @EqualsAndHashCode
 @ToString
 public class TspFitnessFunction implements FitnessFunction {
-    
+
     private final ProblemInfo problemInfo;
 
     @Override

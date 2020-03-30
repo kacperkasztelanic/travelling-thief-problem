@@ -1,14 +1,14 @@
 package ttp.presenter;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.BitmapEncoder.BitmapFormat;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.style.Styler;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ import ttp.model.Statistics;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode
 @ToString
-public abstract class AbstractXChartResultPresenter implements ResultPresenter {
+abstract class AbstractXChartResultPresenter implements ResultPresenter {
 
     protected static final String TITLE = "Traveling Thief Problem";
     protected static final String Y_LABEL = "Value";
@@ -41,15 +41,24 @@ public abstract class AbstractXChartResultPresenter implements ResultPresenter {
     }
 
     protected XYChart prepareChart(List<Statistics> statistics) {
-        XYChart chart = new XYChartBuilder().width(width).height(height).title(TITLE).xAxisTitle(xLabel)
-                .yAxisTitle(Y_LABEL).build();
+        XYChart chart = new XYChartBuilder()//
+                .width(width)//
+                .height(height)//
+                .title(TITLE)//
+                .xAxisTitle(xLabel)//
+                .yAxisTitle(Y_LABEL)//
+                .build();
         chart.getStyler().setXAxisMin(0.0);
         chart.getStyler().setXAxisMax((double) statistics.size());
         chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideSE);
         chart.getStyler().setAxisTitlesVisible(true);
         for (ChartSeries chartSeries : prepareSeriesCollection(statistics)) {
-            chart.addSeries(chartSeries.getLabel(), chartSeries.getXSeries(), chartSeries.getYSeries(),
-                    chartSeries.getErrors().orElse(null));
+            chart.addSeries(//
+                    chartSeries.getLabel(),//
+                    chartSeries.getXSeries(),//
+                    chartSeries.getYSeries(),//
+                    chartSeries.getErrors().orElse(null)//
+            );
         }
         return chart;
     }
@@ -67,7 +76,7 @@ public abstract class AbstractXChartResultPresenter implements ResultPresenter {
 
         public static ChartSeries of(String label, List<? extends Number> xSeries, List<? extends Number> ySeries,
                 List<? extends Number> errors) {
-            return new ChartSeries(label, xSeries, ySeries, Optional.ofNullable(errors));
+            return new ChartSeries(label, xSeries, ySeries, errors);
         }
 
         public static ChartSeries of(String label, List<? extends Number> xSeries, List<? extends Number> ySeries) {
@@ -80,7 +89,10 @@ public abstract class AbstractXChartResultPresenter implements ResultPresenter {
         private final List<? extends Number> xSeries;
         @Getter
         private final List<? extends Number> ySeries;
-        @Getter
-        private final Optional<List<? extends Number>> errors;
+        private final List<? extends Number> errors;
+
+        public Optional<List<? extends Number>> getErrors() {
+            return Optional.ofNullable(errors);
+        }
     }
 }

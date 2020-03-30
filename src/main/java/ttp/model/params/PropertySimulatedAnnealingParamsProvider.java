@@ -21,13 +21,15 @@ public class PropertySimulatedAnnealingParamsProvider {
 
     public enum SimulatedAnnealingProperties {
 
-        ITERATIONS("sa_iterations"), STARTING_TEMPERATURE("starting_temperature"), COOLING_RATE(
-                "cooling_rate"), STOP_TEMPERATURE("stop_temperature");
+        ITERATIONS("sa_iterations"),//
+        STARTING_TEMPERATURE("starting_temperature"),//
+        COOLING_RATE("cooling_rate"),//
+        STOP_TEMPERATURE("stop_temperature");
 
         @Getter
         private final String key;
 
-        private SimulatedAnnealingProperties(String key) {
+        SimulatedAnnealingProperties(String key) {
             this.key = key;
         }
     }

@@ -22,7 +22,7 @@ public class ProblemInfo {
     private final Map<Integer, List<Item>> itemsByNodes;
     private final double[][] distances;
 
-    public static final ProblemInfo of(Problem problem) {
+    public static ProblemInfo of(Problem problem) {
         return new ProblemInfo(problem);
     }
 

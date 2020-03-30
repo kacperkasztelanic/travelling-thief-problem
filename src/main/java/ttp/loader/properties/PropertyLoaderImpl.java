@@ -13,13 +13,13 @@ import ttp.loader.exception.LoadException;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class PropertyLoaderImpl implements PropertyLoader {
+class PropertyLoaderImpl implements PropertyLoader {
 
     private final String defaultPropertiesResource;
 
     @Override
     public Properties load(String file) throws LoadException {
-        Properties defaultProperties = null;
+        Properties defaultProperties;
         try {
             defaultProperties = loadPropertiesFromResource(defaultPropertiesResource);
         } catch (IOException e) {
@@ -37,7 +37,9 @@ public class PropertyLoaderImpl implements PropertyLoader {
     private Properties loadPropertiesFromResource(String resource) throws IOException {
         Properties properties = new Properties();
         try (InputStream is = getClass().getClassLoader().getResourceAsStream(resource)) {
-            properties.load(is);
+            if (is != null) {
+                properties.load(is);
+            }
         }
         return properties;
     }

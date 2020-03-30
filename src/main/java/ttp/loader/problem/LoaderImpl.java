@@ -21,14 +21,13 @@ import ttp.loader.exception.LoadException;
 import ttp.model.Item;
 import ttp.model.Node;
 import ttp.model.Problem;
-import ttp.model.Problem.ProblemBuilder;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @ToString
-public class LoaderImpl implements Loader {
+class LoaderImpl implements Loader {
 
     private static final String DEFAULT_NUMERIC = "-1";
-    private static final String BASIC_DATA_DELIMETER = ":";
+    private static final String BASIC_DATA_DELIMITER = ":";
     private static final String ALL_WHITESPACES_REGEX = "\\s+";
 
     @Override
@@ -50,26 +49,33 @@ public class LoaderImpl implements Loader {
         List<Item> items = linesByRawDataType.getOrDefault(RawDataType.ITEMS, Collections.emptyList()).stream()
                 .map(this::parseItem).collect(Collectors.toList());
 
-        ProblemBuilder builder = Problem.builder();
-        builder.problemName(basicData.getOrDefault(BasicDataType.PROBLEM_NAME, ""));
-        builder.knapsackDataType(basicData.getOrDefault(BasicDataType.KNAPSACK_DATA_TYPE, ""));
-        builder.dimension(Integer.parseInt(basicData.getOrDefault(BasicDataType.DIMENSION, DEFAULT_NUMERIC)));
-        builder.numberOfItems(Integer.parseInt(basicData.getOrDefault(BasicDataType.NUMBER_OF_ITEMS, DEFAULT_NUMERIC)));
-        builder.capacityOfKnapsack(
-                Integer.parseInt(basicData.getOrDefault(BasicDataType.CAPACITY_OF_KNAPSACK, DEFAULT_NUMERIC)));
-        builder.minSpeed(Double.parseDouble(basicData.getOrDefault(BasicDataType.MIN_SPEED, DEFAULT_NUMERIC)));
-        builder.maxSpeed(Double.parseDouble(basicData.getOrDefault(BasicDataType.MAX_SPEED, DEFAULT_NUMERIC)));
-        builder.rentingRatio(Double.parseDouble(basicData.getOrDefault(BasicDataType.RENTING_RATIO, DEFAULT_NUMERIC)));
-        builder.edgeWeightType(basicData.getOrDefault(BasicDataType.EDGE_WEIGHT_TYPE, ""));
-        builder.nodes(nodes);
-        builder.items(items);
-        return builder.build();
+        return Problem.builder()//
+                .problemName(basicData.getOrDefault(BasicDataType.PROBLEM_NAME, ""))//
+                .knapsackDataType(basicData.getOrDefault(BasicDataType.KNAPSACK_DATA_TYPE, ""))//
+                .dimension(Integer.parseInt(basicData.getOrDefault(BasicDataType.DIMENSION, DEFAULT_NUMERIC)))//
+                .numberOfItems(
+                        Integer.parseInt(basicData.getOrDefault(BasicDataType.NUMBER_OF_ITEMS, DEFAULT_NUMERIC)))//
+                .capacityOfKnapsack(
+                        Integer.parseInt(basicData.getOrDefault(BasicDataType.CAPACITY_OF_KNAPSACK, DEFAULT_NUMERIC)))//
+                .minSpeed(Double.parseDouble(basicData.getOrDefault(BasicDataType.MIN_SPEED, DEFAULT_NUMERIC)))//
+                .maxSpeed(Double.parseDouble(basicData.getOrDefault(BasicDataType.MAX_SPEED, DEFAULT_NUMERIC)))//
+                .rentingRatio(
+                        Double.parseDouble(basicData.getOrDefault(BasicDataType.RENTING_RATIO, DEFAULT_NUMERIC)))//
+                .edgeWeightType(basicData.getOrDefault(BasicDataType.EDGE_WEIGHT_TYPE, ""))//
+                .nodes(nodes)//
+                .items(items)//
+                .build();
     }
 
     private Map<BasicDataType, String> parseBasicData(List<String> lines) {
-        return lines.stream().map(l -> l.split(BASIC_DATA_DELIMETER))
-                .collect(Collectors.toMap(a -> BasicDataType.forMarker(a[0]), a -> a[1].trim(), (p, r) -> p,
-                        () -> new EnumMap<>(BasicDataType.class)));
+        return lines.stream()//
+                .map(l -> l.split(BASIC_DATA_DELIMITER))//
+                .collect(Collectors.toMap(//
+                        a -> BasicDataType.forMarker(a[0]), //
+                        a -> a[1].trim(),//
+                        (p, r) -> p,//
+                        () -> new EnumMap<>(BasicDataType.class)//
+                ));
     }
 
     private Node parseNode(String line) {
@@ -90,8 +96,13 @@ public class LoaderImpl implements Loader {
     }
 
     private Map<RawDataType, List<String>> groupLines(List<String> lines) {
-        Map<RawDataType, List<String>> result = Arrays.stream(RawDataType.values()).collect(Collectors.toMap(
-                Function.identity(), t -> new ArrayList<>(), (p, r) -> p, () -> new EnumMap<>(RawDataType.class)));
+        Map<RawDataType, List<String>> result = Arrays.stream(RawDataType.values())//
+                .collect(Collectors.toMap(//
+                        Function.identity(),//
+                        t -> new ArrayList<>(),//
+                        (p, r) -> p,//
+                        () -> new EnumMap<>(RawDataType.class)//
+                ));
         RawDataType currentType = null;
         for (String line : lines) {
             RawDataType temp = RawDataType.forMarker(line);
@@ -109,8 +120,8 @@ public class LoaderImpl implements Loader {
     }
 
     private List<String> readLines(String resource) throws IOException {
-        try (BufferedReader br = new BufferedReader(
-                new InputStreamReader(Optional.ofNullable(getClass().getClassLoader().getResourceAsStream(resource))
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                Optional.ofNullable(getClass().getClassLoader().getResourceAsStream(resource))
                         .orElseThrow(IOException::new)))) {
             return br.lines().collect(Collectors.toList());
         }
@@ -118,46 +129,51 @@ public class LoaderImpl implements Loader {
 
     private enum RawDataType {
 
-        BASIC("PROBLEM NAME", true), NODE_COORDS("NODE_COORD_SECTION", false), ITEMS("ITEMS SECTION", false);
+        BASIC("PROBLEM NAME", true),//
+        NODE_COORDS("NODE_COORD_SECTION", false),//
+        ITEMS("ITEMS SECTION", false);
 
         @Getter
         private final String marker;
-
         @Getter
         private final boolean inlineValue;
 
-        private RawDataType(String marker, boolean inlineValue) {
+        RawDataType(String marker, boolean inlineValue) {
             this.marker = marker;
             this.inlineValue = inlineValue;
         }
 
         public static RawDataType forMarker(String line) {
-            return Arrays.stream(RawDataType.values()).filter(t -> line.trim().contains(t.getMarker())).findFirst()
+            return Arrays.stream(RawDataType.values())//
+                    .filter(t -> line.trim().contains(t.getMarker()))//
+                    .findFirst()//
                     .orElse(null);
         }
     }
 
     private enum BasicDataType {
 
-        PROBLEM_NAME("PROBLEM NAME"), 
-        KNAPSACK_DATA_TYPE("KNAPSACK DATA TYPE"), 
-        DIMENSION("DIMENSION"), 
-        NUMBER_OF_ITEMS("NUMBER OF ITEMS"), 
-        CAPACITY_OF_KNAPSACK("CAPACITY OF KNAPSACK"), 
-        MIN_SPEED("MIN SPEED"), 
-        MAX_SPEED( "MAX SPEED"), 
-        RENTING_RATIO("RENTING RATIO"), 
+        PROBLEM_NAME("PROBLEM NAME"),//
+        KNAPSACK_DATA_TYPE("KNAPSACK DATA TYPE"),//
+        DIMENSION("DIMENSION"),//
+        NUMBER_OF_ITEMS("NUMBER OF ITEMS"),//
+        CAPACITY_OF_KNAPSACK("CAPACITY OF KNAPSACK"),//
+        MIN_SPEED("MIN SPEED"),//
+        MAX_SPEED("MAX SPEED"),//
+        RENTING_RATIO("RENTING RATIO"),//
         EDGE_WEIGHT_TYPE("EDGE_WEIGHT_TYPE");
 
         @Getter
         private final String marker;
 
-        private BasicDataType(String marker) {
+        BasicDataType(String marker) {
             this.marker = marker;
         }
 
         public static BasicDataType forMarker(String line) {
-            return Arrays.stream(BasicDataType.values()).filter(t -> line.trim().contains(t.getMarker())).findFirst()
+            return Arrays.stream(BasicDataType.values())//
+                    .filter(t -> line.trim().contains(t.getMarker()))//
+                    .findFirst()//
                     .orElse(null);
         }
     }

@@ -3,9 +3,10 @@ package ttp.utils;
 import java.util.Arrays;
 import java.util.Random;
 
-import lombok.experimental.UtilityClass;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-@UtilityClass
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ArrayUtils {
 
     private static final Random RANDOM = new Random();

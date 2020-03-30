@@ -17,7 +17,7 @@ import ttp.utils.ArrayUtils;
 public class HybridIndividualFactory extends SimpleIndividualFactory {
 
     private final HybridParams hybridParams;
-    
+
     @Setter
     private ImproveStrategy improveStrategy;
 
@@ -39,9 +39,9 @@ public class HybridIndividualFactory extends SimpleIndividualFactory {
 
     @Override
     public Individual randomIndividual(int[] nodes) {
-        if(!hybridParams.isHybridInitialization()) {
+        if (!hybridParams.isHybridInitialization()) {
             return super.randomIndividual(nodes);
         }
-        return improveStrategy.tryToImprove(newIndividual(ArrayUtils.shuffledCopy(nodes)));            
+        return improveStrategy.tryToImprove(newIndividual(ArrayUtils.shuffledCopy(nodes)));
     }
 }

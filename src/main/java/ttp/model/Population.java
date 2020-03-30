@@ -76,9 +76,10 @@ public class Population {
     }
 
     private Individual[] select(int n) {
-        return random.ints((long) (geneticParams.getTournamentSize() * members.length * n), 0, members.length)
-                .mapToObj(i -> members[i])
-                .sorted(Comparator.comparingDouble((Individual i) -> i.getResult().getValue()).reversed()).limit(n)
+        return random.ints((long) (geneticParams.getTournamentSize() * members.length * n), 0, members.length)//
+                .mapToObj(i -> members[i])//
+                .sorted(Comparator.comparingDouble((Individual i) -> i.getResult().getValue()).reversed())//
+                .limit(n)//
                 .toArray(Individual[]::new);
     }
 

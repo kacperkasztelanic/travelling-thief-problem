@@ -35,8 +35,8 @@ public class TtpFitnessFunction implements FitnessFunction {
                     weight += item.getWeight();
                 }
             }
-            totalTime += problemInfo.distanceBetween(node, nextNode)
-                    / (1 - weight * (problem.getMaxSpeed() - problem.getMinSpeed()) / problem.getCapacityOfKnapsack());
+            totalTime += problemInfo.distanceBetween(node, nextNode) / (1 - weight * (problem.getMaxSpeed() - problem
+                    .getMinSpeed()) / problem.getCapacityOfKnapsack());
         }
         double value = profit - totalTime * problemInfo.getProblem().getRentingRatio();
         return Result.of(profit, weight, totalTime, value);

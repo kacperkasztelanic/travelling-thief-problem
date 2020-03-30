@@ -29,17 +29,30 @@ public class GaXChartResultPresenter extends AbstractXChartResultPresenter {
 
     @Override
     protected List<ChartSeries> prepareSeriesCollection(List<Statistics> statistics) {
-        List<Number> xSeries = IntStream.range(0, statistics.size()).boxed().collect(Collectors.toList());
-        ChartSeries minSeries = ChartSeries.of(MIN_SERIES_LABEL, xSeries,
-                prepareSeries(statistics, Statistics::getMinValue));
-        ChartSeries maxSeries = ChartSeries.of(MAX_SERIES_LABEL, xSeries,
-                prepareSeries(statistics, Statistics::getMaxValue));
-        ChartSeries avgSeries = ChartSeries.of(AVG_SERIES_LABEL, xSeries,
-                prepareSeries(statistics, Statistics::getAvgValue), prepareSeries(statistics, Statistics::getStdDev));
+        List<Number> xSeries = IntStream.range(0, statistics.size())//
+                .boxed()//
+                .collect(Collectors.toList());
+        ChartSeries minSeries = ChartSeries.of(//
+                MIN_SERIES_LABEL,//
+                xSeries,//
+                prepareSeries(statistics, Statistics::getMinValue)//
+        );
+        ChartSeries maxSeries = ChartSeries.of(//
+                MAX_SERIES_LABEL,//
+                xSeries,//
+                prepareSeries(statistics, Statistics::getMaxValue)//
+        );
+        ChartSeries avgSeries = ChartSeries.of(AVG_SERIES_LABEL,//
+                xSeries,//
+                prepareSeries(statistics, Statistics::getAvgValue),//
+                prepareSeries(statistics, Statistics::getStdDev)//
+        );
         return Arrays.asList(minSeries, maxSeries, avgSeries);
     }
 
     private List<Number> prepareSeries(List<Statistics> statistics, Function<Statistics, Number> extractor) {
-        return statistics.stream().map(extractor::apply).collect(Collectors.toList());
+        return statistics.stream()//
+                .map(extractor)//
+                .collect(Collectors.toList());
     }
 }

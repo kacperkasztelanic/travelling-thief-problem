@@ -19,7 +19,9 @@ public class SimulatedAnnealingParams {
 
     @Override
     public String toString() {
-        return "SimulatedAnnealingParams(iterations: " + iterations + ", startingTemperature: " + startingTemperature
-                + ", coolingRate: " + coolingRate + ", stopTemperature: " + stopTemperature + ")";
+        return "SimulatedAnnealingParams(iterations: " + iterations //
+                + ", startingTemperature: " + startingTemperature//
+                + ", coolingRate: " + coolingRate //
+                + ", stopTemperature: " + stopTemperature + ")";
     }
 }

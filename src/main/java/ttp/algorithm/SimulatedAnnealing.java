@@ -26,8 +26,11 @@ public class SimulatedAnnealing implements Algorithm<Individual>, ImproveStrateg
 
     @Override
     public List<Individual> solve(ProblemInfo problemInfo) {
-        int[] currentSolution = ArrayUtils
-                .shuffledCopy(problemInfo.getProblem().getNodes().stream().mapToInt(Node::getId).toArray());
+        int[] currentSolution = ArrayUtils.shuffledCopy(//
+                problemInfo.getProblem().getNodes().stream()//
+                        .mapToInt(Node::getId)//
+                        .toArray()//
+        );
         return solveInternal(currentSolution);
     }
 
@@ -43,7 +46,8 @@ public class SimulatedAnnealing implements Algorithm<Individual>, ImproveStrateg
     }
 
     private Individual findBest(List<Individual> individuals) {
-        return individuals.stream().max(Comparator.comparingDouble(i -> i.getResult().getValue()))
+        return individuals.stream()//
+                .max(Comparator.comparingDouble(i -> i.getResult().getValue()))//
                 .orElseThrow(IllegalStateException::new);
     }
 
@@ -59,9 +63,10 @@ public class SimulatedAnnealing implements Algorithm<Individual>, ImproveStrateg
                 Individual current = individualFactory.newIndividual(currentSolution);
                 if (current.getResult().getValue() > best.getResult().getValue()) {
                     best = current;
-                } else if (Math
+                }
+                else if (Math
                         .exp((current.getResult().getValue() - best.getResult().getValue()) / currentTemperature) < Math
-                                .random()) {
+                        .random()) {
                     ArrayUtils.swap(r1, r2, currentSolution);
                 }
                 result.add(current);

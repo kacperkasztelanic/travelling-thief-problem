@@ -76,7 +76,8 @@ public class Individual {
         for (int i = 0, a = 0; i < counts.length; i++) {
             if (counts[i] == 2) {
                 duplicated.add(i + 1);
-            } else if (counts[i] == 0) {
+            }
+            else if (counts[i] == 0) {
                 absent[a++] = i + 1;
             }
         }

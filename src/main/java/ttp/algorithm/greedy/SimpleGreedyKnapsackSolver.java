@@ -1,7 +1,7 @@
 package ttp.algorithm.greedy;
 
 import java.util.Comparator;
-import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -32,9 +32,10 @@ public class SimpleGreedyKnapsackSolver implements KnapsackSolver {
     }
 
     private Item[] itemsByValueToWeightRatio() {
-        Function<Item, Double> profitToWeightRatio = i -> ((double) i.getProfit()) / i.getWeight();
-        return problemInfo.getProblem().getItems().stream()
-                .sorted(Comparator.comparingDouble(profitToWeightRatio::apply).reversed()).toArray(Item[]::new);
+        ToDoubleFunction<Item> profitToWeightRatio = i -> ((double) i.getProfit()) / i.getWeight();
+        return problemInfo.getProblem().getItems().stream()//
+                .sorted(Comparator.comparingDouble(profitToWeightRatio).reversed())//
+                .toArray(Item[]::new);
     }
 
     private Item[] fillKnapsack() {

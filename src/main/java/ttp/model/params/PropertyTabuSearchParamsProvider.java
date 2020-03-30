@@ -17,12 +17,13 @@ public class PropertyTabuSearchParamsProvider {
 
     public enum TabuSearchProperties {
 
-        ITERATIONS("ts_iterations"), TABU_DURATION("tabu_duration");
+        ITERATIONS("ts_iterations"),//
+        TABU_DURATION("tabu_duration");
 
         @Getter
         private final String key;
 
-        private TabuSearchProperties(String key) {
+        TabuSearchProperties(String key) {
             this.key = key;
         }
     }

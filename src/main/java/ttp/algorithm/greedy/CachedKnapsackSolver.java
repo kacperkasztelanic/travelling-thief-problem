@@ -12,16 +12,16 @@ import ttp.model.Item;
 
 @EqualsAndHashCode(of = { "knapsackSolver" })
 @ToString(of = { "knapsackSolver" })
-public class CachedKnapsachSolver implements KnapsackSolver {
+public class CachedKnapsackSolver implements KnapsackSolver {
 
     private final KnapsackSolver knapsackSolver;
     private final Map<IntArrayWrapper, Item[]> cache = new HashMap<>();
 
-    public static CachedKnapsachSolver instance(KnapsackSolver knapsackSolver) {
-        return new CachedKnapsachSolver(knapsackSolver);
+    public static CachedKnapsackSolver instance(KnapsackSolver knapsackSolver) {
+        return new CachedKnapsackSolver(knapsackSolver);
     }
 
-    private CachedKnapsachSolver(KnapsackSolver knapsackSolver) {
+    private CachedKnapsackSolver(KnapsackSolver knapsackSolver) {
         this.knapsackSolver = knapsackSolver;
     }
 

@@ -53,11 +53,11 @@ public class AdvancedGreedyKnapsackSolver implements KnapsackSolver {
 
         for (int i = 0; i < problem.getItems().size(); i++) {
             Item item = problem.getItems().get(i);
-            double distanceToFinish = routeDistance
-                    - nodeWithDistanceFromStart[item.getAssignedNode() - 1].getDistanceFromStart();
+            double distanceToFinish = routeDistance - nodeWithDistanceFromStart[item.getAssignedNode() - 1]
+                    .getDistanceFromStart();
             double dVx = ((minSpeed - maxSpeed) / capacity) * ((double) item.getWeight());
-            double itemValue = (double) item.getProfit()
-                    - rentingRatio * ((distanceToFinish / (maxSpeed + dVx)) - (distanceToFinish / maxSpeed));
+            double itemValue = (double) item
+                    .getProfit() - rentingRatio * ((distanceToFinish / (maxSpeed + dVx)) - (distanceToFinish / maxSpeed));
             result[i] = ItemWithValue.of(item, itemValue);
         }
         Arrays.sort(result, Comparator.comparingDouble(ItemWithValue::getValue).reversed());

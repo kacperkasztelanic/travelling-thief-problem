@@ -21,7 +21,10 @@ public class Result {
 
     @Override
     public String toString() {
-        return String.format(Locale.US, "Result(profit: %d, weight: %d, totalTime: %.2f, value: %.2f)", profit, weight,
-                totalTime, value);
+        return String.format(//
+                Locale.US, //
+                "Result(profit: %d, weight: %d, totalTime: %.2f, value: %.2f)",//
+                profit, weight, totalTime, value//
+        );
     }
 }

@@ -26,8 +26,11 @@ public class TabuSearch implements Algorithm<Individual> {
 
     @Override
     public List<Individual> solve(ProblemInfo problemInfo) {
-        int[] currentSolution = ArrayUtils
-                .shuffledCopy(problemInfo.getProblem().getNodes().stream().mapToInt(Node::getId).toArray());
+        int[] currentSolution = ArrayUtils.shuffledCopy(//
+                problemInfo.getProblem().getNodes().stream()//
+                        .mapToInt(Node::getId)//
+                        .toArray()//
+        );
         int numberOfIterations = tabuSearchParams.getIterations();
 
         Tabu tabuList = Tabu.of(problemInfo.getProblem().getDimension(), tabuSearchParams.getTabuDuration());
@@ -42,7 +45,8 @@ public class TabuSearch implements Algorithm<Individual> {
 
     @Override
     public Individual solveForBest(ProblemInfo problemInfo) {
-        return solve(problemInfo).stream().max(Comparator.comparingDouble(i -> i.getResult().getValue()))
+        return solve(problemInfo).stream()//
+                .max(Comparator.comparingDouble(i -> i.getResult().getValue()))//
                 .orElseThrow(IllegalStateException::new);
     }
 
@@ -61,7 +65,7 @@ public class TabuSearch implements Algorithm<Individual> {
                 int[] newBestSolution = Arrays.copyOf(bestSolution, bestSolution.length);
                 ArrayUtils.swap(i, j, newBestSolution);
                 Result newBestResult = individualFactory.newIndividual(newBestSolution).getResult();
-                if ((newBestResult.getValue() > bestResult.getValue() || firstNeighbour)
+                if ((newBestResult.getValue() > bestResult.getValue() || firstNeighbour)//
                         && tabuList.getTabuValue(i, j) == 0) {
                     firstNeighbour = false;
                     node1 = i;

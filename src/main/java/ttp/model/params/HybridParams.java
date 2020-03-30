@@ -15,7 +15,7 @@ public class HybridParams {
 
     @Override
     public String toString() {
-        return "HybridParams(hybridProbability: " + hybridProbability + ", hybridInitialization: "
-                + hybridInitialization + ")";
+        return "HybridParams(hybridProbability: " + hybridProbability //
+                + ", hybridInitialization: " + hybridInitialization + ")";
     }
 }

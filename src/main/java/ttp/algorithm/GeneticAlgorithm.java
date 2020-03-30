@@ -2,6 +2,7 @@ package ttp.algorithm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -34,8 +35,10 @@ public class GeneticAlgorithm implements Algorithm<Population> {
 
     @Override
     public Individual solveForBest(ProblemInfo problemInfo) {
-        return solve(problemInfo).stream().map(Population::getMembers).flatMap(Arrays::stream)
-                .max((a, b) -> Double.compare(a.getResult().getValue(), b.getResult().getValue()))
+        return solve(problemInfo).stream()//
+                .map(Population::getMembers)//
+                .flatMap(Arrays::stream)//
+                .max(Comparator.comparingDouble(a -> a.getResult().getValue()))//
                 .orElseThrow(IllegalStateException::new);
     }
 }

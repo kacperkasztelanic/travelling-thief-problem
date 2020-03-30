@@ -7,7 +7,7 @@ import lombok.ToString;
 
 @AllArgsConstructor(staticName = "of")
 @EqualsAndHashCode
-@ToString(includeFieldNames = true)
+@ToString
 public class Statistics {
 
     @Getter

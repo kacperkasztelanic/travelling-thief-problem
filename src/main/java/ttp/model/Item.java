@@ -19,7 +19,9 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Item(id: " + id + ", profit: " + profit + ", weight: " + weight + ", assignedNode: " + assignedNode
-                + ")";
+        return "Item(id: " + id//
+                + ", profit: " + profit//
+                + ", weight: " + weight //
+                + ", assignedNode: " + assignedNode + ")";
     }
 }

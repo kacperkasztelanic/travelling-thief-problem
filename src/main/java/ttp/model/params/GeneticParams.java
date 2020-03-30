@@ -21,8 +21,10 @@ public class GeneticParams {
 
     @Override
     public String toString() {
-        return "GeneticParams(populationSize: " + populationSize + ", numberOfGenerations: " + numberOfGenerations
-                + ", crossoverProbability: " + crossoverProbability + ", mutationProbability: " + mutationProbability
+        return "GeneticParams(populationSize: " + populationSize //
+                + ", numberOfGenerations: " + numberOfGenerations//
+                + ", crossoverProbability: " + crossoverProbability//
+                + ", mutationProbability: " + mutationProbability//
                 + ", tournamentSize: " + tournamentSize + ")";
     }
 }

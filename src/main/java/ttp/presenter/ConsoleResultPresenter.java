@@ -18,7 +18,9 @@ public class ConsoleResultPresenter implements ResultPresenter {
 
     @Override
     public void present(List<Statistics> results) {
-        String result = results.stream().map(Object::toString).collect(Collectors.joining(System.lineSeparator()));
+        String result = results.stream()//
+                .map(Object::toString)//
+                .collect(Collectors.joining(System.lineSeparator()));
         pw.println(result);
     }
 }

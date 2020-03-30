@@ -18,12 +18,13 @@ public class PropertyHybridParamsProvider {
 
     public enum HybridProperties {
 
-        HYBRID_PROBABILITY("hybrid_probability"), HYBRID_INITIALIZATION("hybrid_initialization");
+        HYBRID_PROBABILITY("hybrid_probability"),//
+        HYBRID_INITIALIZATION("hybrid_initialization");
 
         @Getter
         private final String key;
 
-        private HybridProperties(String key) {
+        HybridProperties(String key) {
             this.key = key;
         }
     }

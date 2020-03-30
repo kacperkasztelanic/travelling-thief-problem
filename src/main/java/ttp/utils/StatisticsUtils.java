@@ -5,48 +5,67 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import lombok.experimental.UtilityClass;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ttp.model.Individual;
 import ttp.model.Population;
 import ttp.model.Statistics;
 
-@UtilityClass
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StatisticsUtils {
 
     private static final double DEFAULT = Double.NaN;
 
     public static Statistics analyzeMultipleIndividualLists(List<List<Individual>> results) {
-        DoubleStatistics internalStatistics = results.stream().map(StatisticsUtils::maxValue)
+        DoubleStatistics internalStatistics = results.stream()//
+                .map(StatisticsUtils::maxValue)//
                 .collect(DoubleStatistics.collector());
-        return Statistics.of(internalStatistics.getMin(), internalStatistics.getMax(), internalStatistics.getAverage(),
-                internalStatistics.getStandardDeviation());
+        return Statistics.of(//
+                internalStatistics.getMin(),//
+                internalStatistics.getMax(),//
+                internalStatistics.getAverage(),//
+                internalStatistics.getStandardDeviation()//
+        );
     }
 
     public static Statistics analyzeMultiplePopulationLists(List<List<Population>> results) {
-        return analyzeMultipleIndividualLists(results.stream().map(l -> Arrays.asList(l.get(l.size() - 1).getMembers()))
-                .collect(Collectors.toList()));
+        return analyzeMultipleIndividualLists(//
+                results.stream()//
+                        .map(l -> Arrays.asList(l.get(l.size() - 1).getMembers()))//
+                        .collect(Collectors.toList())//
+        );
     }
 
     public static List<Statistics> analyzeMultiplePopulationListsEach(List<List<Population>> results) {
-        return StatisticsUtils.transpose(results).stream().map(StatisticsUtils::analyzePopulations)
-                .map(StatisticsUtils::analyzeStatistics).collect(Collectors.toList());
+        return StatisticsUtils.transpose(results).stream()//
+                .map(StatisticsUtils::analyzePopulations)//
+                .map(StatisticsUtils::analyzeStatistics)//
+                .collect(Collectors.toList());
     }
 
     public static List<Statistics> analyzeMultipleIndividualListsEach(List<List<Individual>> results) {
-        return StatisticsUtils.transpose(results).stream().map(StatisticsUtils::analyzeIndividuals)
+        return StatisticsUtils.transpose(results).stream()//
+                .map(StatisticsUtils::analyzeIndividuals)//
                 .collect(Collectors.toList());
     }
 
     private static List<Statistics> analyzePopulations(List<Population> results) {
-        return results.stream().map(p -> Arrays.asList(p.getMembers())).map(StatisticsUtils::analyzeIndividuals)
+        return results.stream()//
+                .map(p -> Arrays.asList(p.getMembers()))//
+                .map(StatisticsUtils::analyzeIndividuals)//
                 .collect(Collectors.toList());
     }
 
     private static Statistics analyzeIndividuals(List<Individual> results) {
-        DoubleStatistics internalStatistics = results.stream().map(i -> i.getResult().getValue())
+        DoubleStatistics internalStatistics = results.stream()//
+                .map(i -> i.getResult().getValue())//
                 .collect(DoubleStatistics.collector());
-        return Statistics.of(internalStatistics.getMin(), internalStatistics.getMax(), internalStatistics.getAverage(),
-                internalStatistics.getStandardDeviation());
+        return Statistics.of(//
+                internalStatistics.getMin(),//
+                internalStatistics.getMax(),//
+                internalStatistics.getAverage(),//
+                internalStatistics.getStandardDeviation()//
+        );
     }
 
     private static Statistics analyzeStatistics(List<Statistics> statistics) {
@@ -58,7 +77,10 @@ public class StatisticsUtils {
     }
 
     private static double maxValue(List<Individual> results) {
-        return results.stream().mapToDouble(i -> i.getResult().getValue()).max().orElse(DEFAULT);
+        return results.stream()//
+                .mapToDouble(i -> i.getResult().getValue())//
+                .max()//
+                .orElse(DEFAULT);
     }
 
     private static <T> List<List<T>> transpose(List<List<T>> table) {

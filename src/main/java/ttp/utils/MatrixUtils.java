@@ -2,34 +2,39 @@ package ttp.utils;
 
 import java.util.Locale;
 
-import lombok.experimental.UtilityClass;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-@UtilityClass
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MatrixUtils {
 
-    private static final String DELIMETER = "  ";
+    private static final String DELIMITER = "  ";
 
     public static String toReadableString(double[][] matrix, int decimalPlaces) {
+        int length = MatrixUtils.numLength(getMaxValue(matrix));
+        StringBuilder sb = new StringBuilder();
+        String format = "%" + (length + decimalPlaces + 1) + "." + decimalPlaces + "f";
+        for (double[] row : matrix) {
+            for (double column : row) {
+                sb.append(String.format(Locale.US, format, column));
+                sb.append(DELIMITER);
+            }
+            sb.append(System.lineSeparator());
+        }
+        return sb.toString();
+    }
+
+    private static double getMaxValue(double[][] matrix) {
         double f = Double.MIN_VALUE;
-        for (int row = 0; row < matrix.length; row++) {
-            for (int col = 0; col < matrix[row].length; col++) {
-                double absoluteValue = Math.abs(matrix[row][col]);
+        for (double[] row : matrix) {
+            for (double column : row) {
+                double absoluteValue = Math.abs(column);
                 if (absoluteValue > f) {
                     f = absoluteValue;
                 }
             }
         }
-        int length = MatrixUtils.numLength(f);
-        StringBuilder sb = new StringBuilder();
-        String format = "%" + (length + decimalPlaces + 1) + "." + decimalPlaces + "f";
-        for (int row = 0; row < matrix.length; row++) {
-            for (int col = 0; col < matrix[row].length; col++) {
-                sb.append(String.format(Locale.US, format, matrix[row][col]));
-                sb.append(DELIMETER);
-            }
-            sb.append(System.lineSeparator());
-        }
-        return sb.toString();
+        return f;
     }
 
     private static int numLength(double f) {
